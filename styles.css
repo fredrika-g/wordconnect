@@ -1,0 +1,68 @@
+/* import font here */
+
+:root {
+  font-family: system-ui;
+
+  --outer-padding: 0.5rem;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+#game {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: var(--outer-padding);
+}
+
+#letterCircle {
+  align-self: center;
+  border-radius: 100%;
+  aspect-ratio: 1;
+  max-width: 320px;
+  overflow: hidden;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+#help {
+  position: absolute;
+  right: var(--outer-padding);
+  top: var(--outer-padding);
+  width: 20px;
+  aspect-ratio: 1;
+  border-radius: 100%;
+  border: 1px solid black;
+  text-align: center;
+
+  cursor: pointer;
+}
+
+#help::after {
+  content: '\003F';
+}
+
+#statsDisplay {
+  height: 5rem;
+  background-color: red;
+
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#wordBoard {
+  height: 10rem;
+  background-color: lightgreen;
+}

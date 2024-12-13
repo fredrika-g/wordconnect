@@ -3,7 +3,13 @@
 :root {
   font-family: system-ui;
 
-  --outer-padding: 0.5rem;
+  --font-size-sm: 1rem;
+  --font-size-md: 1.5rem;
+  --font-size-lg: 2rem;
+  --font-size-xl: 2.5rem;
+
+  --btn-padding-sm: 0.3em 0.6em;
+  --btn-padding-md: 0.5em 1em;
 }
 
 body {
@@ -13,21 +19,52 @@ body {
 
 .container {
   margin: 0 auto;
+  width: 100%;
   max-width: 500px;
+  height: 100vh;
+
+  > * {
+    display: none;
+    /* padding: var(--outer-padding); */
+    height: 100%;
+    width: 100%;
+
+    /* temporary */
+    background-color: lightblue;
+  }
 }
 
-#game {
+.container > .active {
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: var(--outer-padding);
 }
+
+.btn {
+  text-transform: uppercase;
+  font-size: var(--font-size-md);
+  padding-inline: calc(var(--font-size-md) * 1);
+  padding-block: calc(var(--font-size-md) * 0.5);
+
+  cursor: pointer;
+}
+
+/* START PAGE */
+
+#startPage {
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* GAME PAGE */
 
 #letterCircle {
   align-self: center;
   border-radius: 100%;
   aspect-ratio: 1;
   max-width: 320px;
+  width: 100%;
   overflow: hidden;
 
   canvas {
@@ -38,8 +75,8 @@ body {
 
 #help {
   position: absolute;
-  right: var(--outer-padding);
-  top: var(--outer-padding);
+  right: 0;
+  top: 0;
   width: 20px;
   aspect-ratio: 1;
   border-radius: 100%;
@@ -63,6 +100,7 @@ body {
 }
 
 #wordBoard {
-  height: 10rem;
+  height: 8rem;
   background-color: lightgreen;
+  color: hsla(0, 0%, 100%, 0.5);
 }

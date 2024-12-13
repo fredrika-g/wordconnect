@@ -7,18 +7,63 @@ const startPage = document.querySelector('#startPage');
 const game = document.querySelector('#game');
 const finishPage = document.querySelector('#finishPage');
 
+// graphics variables
+const lineWidth = 10;
+const lineColor = 0xffffff;
+const bubbleColor = 0x3498db;
+
 // game variables/data storage
 
-let usedLetters = [];
 let currentWords = [];
 let score = 0;
 let usedAttempts = 0;
 
 // GAME LOGIC
 
+const generateWords = () => {
+  // get a keyword
+  const keyword = KEYWORDS[Math.floor(Math.random() * KEYWORDS.length)];
+
+  // returns an object mapping how many instances of each letter in given word
+  const getLetterCount = (word) => {
+    const letterCount = {};
+    for (const letter of word) {
+      letterCount[letter] = (letterCount[letter] || 0) + 1;
+    }
+    return letterCount;
+  };
+
+  // counting the letters in the keyword
+  const keywordLetterCount = getLetterCount(keyword);
+
+  // filter the words that consist of the letters that make up the keyword
+  const words = BASEWORDS.filter((word) => {
+    const wordLetterCount = getLetterCount(word);
+
+    // check that if letter either doesnt exists in keyword, or occurs more times than i the keyword
+    // return false if so
+    for (const letter in wordLetterCount) {
+      if ((keywordLetterCount[letter] || 0) < wordLetterCount[letter]) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  currentWords = words.map((word) => {
+    return { word, isKeyword: false };
+  });
+
+  currentWords.push({ word: keyword, isKeyword: true });
+};
+
 // generate board
 const generateBoard = () => {
   // build the game board
+
+  // clearing html
+  game.innerHTML = '';
 
   //   creating content
 
@@ -79,8 +124,8 @@ const generateLetterCircle = () => {
   let isDrawing = false;
   let currentPath = [];
   let graphics;
-  // const words = ['RANGE', 'ANGER', 'GONE']; // Exempelord
-  const words = KEYWORDS;
+  const words = currentWords.map((word) => word.word);
+
   const lettersSet = [...new Set(words.join('').split(''))]; // Unika bokstäver
 
   function preload() {
@@ -94,13 +139,20 @@ const generateLetterCircle = () => {
     const radius = Math.min(width, height) / 2 - 50; // Radie baserad på minst dimension minus marginal
 
     const angleStep = (2 * Math.PI) / lettersSet.length;
-    graphics = this.add.graphics({ lineStyle: { width: 4, color: 0xffffff } });
 
-    const calculateFontSize = () => {
-      const baseFontSize = 32; // base font size
-      const scaleFactor = Math.min(width, height) / 500; // using width and height to scale
-      return Math.round(baseFontSize * scaleFactor); // return value: adjusted size
+    const bubbleGraphics = this.add.graphics(); // För bubblor
+    graphics = this.add.graphics({
+      lineStyle: { width: lineWidth, color: lineColor },
+    });
+
+    // Funktion för att beräkna textstorlek och bubbla-storlek
+    const calculateBubbleSize = () => {
+      const baseBubbleSize = 64; // Standardstorlek
+      const scaleFactor = Math.min(width, height) / 500; // Skala baserat på dimensioner
+      return Math.round(baseBubbleSize * scaleFactor); // Returnera justerad storlek
     };
+
+    const bubbleSize = calculateBubbleSize();
 
     // placing letters in a circle
     lettersSet.forEach((letter, index) => {
@@ -108,11 +160,15 @@ const generateLetterCircle = () => {
       const x = centerX + radius * Math.cos(angle);
       const y = centerY + radius * Math.sin(angle);
 
+      // Rita cirkel som bakgrund
+      bubbleGraphics.fillStyle(bubbleColor, 0.5); // Blå bakgrundsfärg
+      bubbleGraphics.fillCircle(x, y, bubbleSize / 2); // Cirkel med justerad storlek
+
       const textStyle = {
         fontFamily: 'Arial',
-        fontSize: `${calculateFontSize()}px`, //adjusting the font size dynamically
+        fontSize: `${bubbleSize / 2}px`, //adjusting the font size dynamically
         color: '#fff',
-        // fontStyle: 'bold',
+        fontStyle: 'bold',
         align: 'center',
       };
 
@@ -127,7 +183,7 @@ const generateLetterCircle = () => {
     this.input.on('pointerup', endPath, this);
   }
 
-  function startPath(pointer) {
+  const startPath = (pointer) => {
     isDrawing = true;
     currentPath = [];
     graphics.clear();
@@ -136,9 +192,9 @@ const generateLetterCircle = () => {
       currentPath.push(letter);
       drawContinuousLine();
     }
-  }
+  };
 
-  function drawPath(pointer) {
+  const drawPath = (pointer) => {
     if (!isDrawing) return;
 
     const letter = getLetterAt(pointer.x, pointer.y);
@@ -146,29 +202,49 @@ const generateLetterCircle = () => {
       currentPath.push(letter);
       drawContinuousLine();
     }
-  }
+  };
 
-  function endPath(pointer) {
+  const endPath = (pointer) => {
     isDrawing = false;
 
     const word = currentPath.map((l) => l.letter).join('');
     if (validateWord(word)) {
-      console.log('Correct word:', word);
-      // Färga linje grön vid korrekt ord
-      graphics.lineStyle(4, 0x00ff00);
+      // todo:  score keeping logic ++
+      // todo: attempts logic if enabled
+
+      // temporary
+      console.log('Correct word, ' + isKeyword(word), word);
+
+      isKeyword(word) ? (score += 5) : score++;
+      if (SETTINGS.attemptsEnabled) {
+        // do logic
+        usedAttempts++;
+      }
+      generateScoreBoard();
+
+      graphics.lineStyle(lineWidth, 0x00ff00);
       drawContinuousLine();
     } else {
+      // todo:  score keeping logic
+      // todo: attempts logic if enabled
+
       console.log('Incorrect word:', word);
-      // Färga linje röd vid fel ord
-      graphics.lineStyle(4, 0xff0000);
+
+      if (SETTINGS.attemptsEnabled) {
+        //do logic
+        usedAttempts++;
+      }
+      generateScoreBoard();
+
+      graphics.lineStyle(lineWidth, 0xff0000);
       drawContinuousLine();
     }
-    // Återställ efter en stund
+    // reset graphics
     setTimeout(() => graphics.clear(), 1000);
-  }
+  };
 
-  function drawContinuousLine() {
-    graphics.clear();
+  const drawContinuousLine = () => {
+    // graphics.clear();
     graphics.beginPath();
     if (currentPath.length > 0) {
       graphics.moveTo(currentPath[0].x, currentPath[0].y);
@@ -177,17 +253,24 @@ const generateLetterCircle = () => {
       }
     }
     graphics.strokePath();
-  }
+  };
 
-  function getLetterAt(x, y) {
+  const getLetterAt = (x, y) => {
     return letters.find(
       (letter) => Phaser.Math.Distance.Between(letter.x, letter.y, x, y) < 32
     );
-  }
+  };
 
-  function validateWord(word) {
+  const validateWord = (word) => {
     return words.includes(word);
-  }
+  };
+
+  const isKeyword = (word) => {
+    const match = currentWords.find(
+      (item) => item.word === word && item.isKeyword === true
+    );
+    return match ? true : false;
+  };
 
   function update() {}
 };
@@ -209,6 +292,13 @@ const initGame = () => {
   startPage.innerHTML = '';
   finishPage.innerHTML = '';
 
+  // set active page
+  document.querySelectorAll('.container > .active').forEach((elem) => {
+    elem.classList.remove('active');
+  });
+
+  game.classList.add('active');
+
   //   game elements
   generateBoard();
   generateLetterCircle();
@@ -216,6 +306,40 @@ const initGame = () => {
 };
 
 // START PAGE
+const displayStart = () => {
+  // clear html
+  game.innerHTML = '';
+  finishPage.innerHTML = '';
+
+  // set active page
+  document.querySelectorAll('.container > .active').forEach((elem) => {
+    elem.classList.remove('active');
+  });
+
+  startPage.classList.add('active');
+
+  // create content
+  // 1. title
+  const titleElem = document.createElement('h1');
+  titleElem.innerText = 'Word Connect';
+  titleElem.id = 'title';
+
+  // 2. instructions
+  const instructionsElem = document.createElement('p');
+  instructionsElem.innerText = 'lorem ipsum blablabla';
+  instructionsElem.classList.add('instructions');
+
+  // 3. start btn
+  const startBtn = document.createElement('button');
+  startBtn.innerText = 'Starta';
+  startBtn.id = 'startBtn';
+  startBtn.classList.add('btn');
+  startBtn.addEventListener('click', initGame);
+
+  // append content on page
+  startPage.append(titleElem, instructionsElem, startBtn);
+  startPage.classList.add('active');
+};
 
 // FINISH PAGE
 
@@ -223,7 +347,9 @@ const initGame = () => {
 const renderPage = () => {
   // show start page
   console.log('START OF APPLICATION');
-  initGame();
+  displayStart();
+  // initGame();
+  generateWords();
 };
 
-renderPage();
+document.addEventListener('DOMContentLoaded', renderPage);

@@ -7,11 +7,6 @@ const startPage = document.querySelector('#startPage');
 const game = document.querySelector('#game');
 const finishPage = document.querySelector('#finishPage');
 
-// graphics variables
-const lineWidth = 10;
-const lineColor = 0xffffff;
-const bubbleColor = 0x3498db;
-
 // game variables/data storage
 
 let currentWords = [];
@@ -52,10 +47,10 @@ const generateWords = () => {
   });
 
   currentWords = words.map((word) => {
-    return { word, isKeyword: false };
+    return { word: word.toUpperCase(), isKeyword: false };
   });
 
-  currentWords.push({ word: keyword, isKeyword: true });
+  currentWords.push({ word: keyword.toUpperCase(), isKeyword: true });
 };
 
 // generate board
@@ -107,7 +102,7 @@ const generateLetterCircle = () => {
     type: Phaser.AUTO,
     width: '100%',
     height: '100%',
-    backgroundColor: '#90ee90',
+    backgroundColor: SETTINGS.letterPicker.bg,
     font: {
       fontFamily: 'system-ui',
     },
@@ -126,33 +121,40 @@ const generateLetterCircle = () => {
   let graphics;
   const words = currentWords.map((word) => word.word);
 
-  const lettersSet = [...new Set(words.join('').split(''))]; // Unika bokstäver
+  // todo: ensure that several of the same letter in a word are taken into account
+  const lettersSet = [...new Set(words.join('').split(''))]; // currently getting unique letters
 
+  // phaser build
   function preload() {
-    this.load.image('dot', 'https://via.placeholder.com/10'); // Placeholder för nod
+    this.load.image('dot', 'https://via.placeholder.com/10'); // node placeholder
   }
 
+  // phaser build
   function create() {
-    const { width, height } = this.scale.gameSize; // Dynamiskt hämta bredd och höjd
+    const { width, height } = this.scale.gameSize; // dynamically fetch width and height
     const centerX = width / 2;
     const centerY = height / 2;
-    const radius = Math.min(width, height) / 2 - 50; // Radie baserad på minst dimension minus marginal
+    const radius = Math.min(width, height) / 2 - 50; // radius based on min dimension minus margin
 
     const angleStep = (2 * Math.PI) / lettersSet.length;
 
-    const bubbleGraphics = this.add.graphics(); // För bubblor
+    const bubbleGraphics = this.add.graphics(); // "letter bubbles" graphic object
+    // line graphic object
     graphics = this.add.graphics({
-      lineStyle: { width: lineWidth, color: lineColor },
+      lineStyle: {
+        width: SETTINGS.letterPicker.lineWidth,
+        color: SETTINGS.letterPicker.lineColor,
+      },
     });
 
-    // Funktion för att beräkna textstorlek och bubbla-storlek
+    // calculating the bubble size
     const calculateBubbleSize = () => {
-      const baseBubbleSize = 64; // Standardstorlek
-      const scaleFactor = Math.min(width, height) / 500; // Skala baserat på dimensioner
-      return Math.round(baseBubbleSize * scaleFactor); // Returnera justerad storlek
+      const baseBubbleSize = 64; // base size
+      const scaleFactor = Math.min(width, height) / 500; // scale based on dimensions
+      return Math.round(baseBubbleSize * scaleFactor); // return adjusted size
     };
 
-    const bubbleSize = calculateBubbleSize();
+    const bubbleSize = calculateBubbleSize(); //set bubble size
 
     // placing letters in a circle
     lettersSet.forEach((letter, index) => {
@@ -160,9 +162,18 @@ const generateLetterCircle = () => {
       const x = centerX + radius * Math.cos(angle);
       const y = centerY + radius * Math.sin(angle);
 
-      // Rita cirkel som bakgrund
-      bubbleGraphics.fillStyle(bubbleColor, 0.5); // Blå bakgrundsfärg
-      bubbleGraphics.fillCircle(x, y, bubbleSize / 2); // Cirkel med justerad storlek
+      bubbleGraphics.lineStyle(
+        SETTINGS.letterPicker.bubbleBorderWidth,
+        SETTINGS.letterPicker.bubbleBorderColor
+      ); // border width, color
+      bubbleGraphics.strokeCircle(x, y, bubbleSize / 2); // draw the border
+
+      // create the circle shaped background for the letter
+      bubbleGraphics.fillStyle(
+        SETTINGS.letterPicker.bubbleColor,
+        SETTINGS.letterPicker.bubbleColorAlpha
+      ); // background color
+      bubbleGraphics.fillCircle(x, y, bubbleSize / 2); // set circle size
 
       const textStyle = {
         fontFamily: 'Arial',
@@ -208,7 +219,7 @@ const generateLetterCircle = () => {
     isDrawing = false;
 
     const word = currentPath.map((l) => l.letter).join('');
-    if (validateWord(word)) {
+    if (validateWord(words, word)) {
       // todo:  score keeping logic ++
       // todo: attempts logic if enabled
 
@@ -222,7 +233,7 @@ const generateLetterCircle = () => {
       }
       generateScoreBoard();
 
-      graphics.lineStyle(lineWidth, 0x00ff00);
+      graphics.lineStyle(SETTINGS.letterPicker.lineWidth, 0x00ff00);
       drawContinuousLine();
     } else {
       // todo:  score keeping logic
@@ -236,7 +247,7 @@ const generateLetterCircle = () => {
       }
       generateScoreBoard();
 
-      graphics.lineStyle(lineWidth, 0xff0000);
+      graphics.lineStyle(SETTINGS.letterPicker.lineWidth, 0xff0000);
       drawContinuousLine();
     }
     // reset graphics
@@ -261,18 +272,18 @@ const generateLetterCircle = () => {
     );
   };
 
-  const validateWord = (word) => {
-    return words.includes(word);
-  };
-
-  const isKeyword = (word) => {
-    const match = currentWords.find(
-      (item) => item.word === word && item.isKeyword === true
-    );
-    return match ? true : false;
-  };
-
+  // phaser build
   function update() {}
+};
+
+const validateWord = (wordList, word) => {
+  return wordList.includes(word);
+};
+const isKeyword = (word) => {
+  const match = currentWords.find(
+    (item) => item.word === word && item.isKeyword === true
+  );
+  return match ? true : false;
 };
 
 const generateScoreBoard = () => {

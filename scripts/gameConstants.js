@@ -1,4 +1,13 @@
-// provided keywords here
+// PROVIDED KEYWORDS HERE: FOLLOW GIVEN FORMAT
+
+export const keywordsJSON = {
+  snabb: ['ban', 'bas', 'sa'],
+  enkel: ['en', 'len', 'elen', 'klen'],
+  trygg: ['try', 'gry', 'gryt'],
+  grön: ['nog', 'örn', 'rön'],
+  smart: ['mars', 'arm', 'mast', 'stram', 'ram'],
+};
+
 export const KEYWORDS = ['snabb', 'enkel', 'trygg', 'grön', 'smart'];
 
 export const BASEWORDS = [

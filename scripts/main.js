@@ -1,5 +1,6 @@
 import { KEYWORDS } from './gameConstants.js';
 import { BASEWORDS } from './gameConstants.js';
+import { keywordsJSON } from './gameConstants.js';
 
 import { SETTINGS } from './settings.js';
 
@@ -51,6 +52,22 @@ const generateWords = () => {
   });
 
   currentWords.push({ word: keyword.toUpperCase(), isKeyword: true });
+
+  // ALT 2
+  // get the keys (i.e the keywords)
+  let keywords = Object.keys(keywordsJSON);
+
+  // get random keyword for current game round
+  const current = keywords[Math.floor(Math.random() * keywords.length)];
+
+  // joining keyword + related words in array
+  const currentWordsLower = [current, ...keywordsJSON[current]];
+
+  // making all words uppercase
+  currentWords = currentWordsLower.map((word) => {
+    return word.toUpperCase();
+  });
+  console.log(currentWords);
 };
 
 // generate board
@@ -119,7 +136,7 @@ const generateLetterCircle = () => {
   let isDrawing = false;
   let currentPath = [];
   let graphics;
-  const words = currentWords.map((word) => word.word);
+  const words = currentWords.map((word) => word);
 
   // todo: ensure that several of the same letter in a word are taken into account
   const lettersSet = [...new Set(words.join('').split(''))]; // currently getting unique letters

@@ -22,6 +22,7 @@ const letterPicker = {
   },
 };
 
+// setting object
 export const SETTINGS = {
   maxPoints,
   maxAttempts,

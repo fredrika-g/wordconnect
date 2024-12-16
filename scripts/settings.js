@@ -1,8 +1,8 @@
 // GAME SETTINGS
 
-const maxPoints = 100;
+// const maxPoints = 100;
 
-const maxAttempts = 20;
+// const maxAttempts = 20;
 
 const attemptsEnabled = true;
 
@@ -24,8 +24,8 @@ const letterPicker = {
 
 // setting object
 export const SETTINGS = {
-  maxPoints,
-  maxAttempts,
+  // maxPoints,
+  // maxAttempts,
   attemptsEnabled,
   letterPicker,
 };

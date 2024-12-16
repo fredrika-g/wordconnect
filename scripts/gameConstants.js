@@ -4,8 +4,8 @@ export const keywordsJSON = {
   snabb: ['ban', 'bas', 'sa'],
   enkel: ['en', 'len', 'elen', 'klen'],
   trygg: ['try', 'gry', 'gryt'],
-  grön: ['nog', 'örn', 'rön'],
-  smart: ['mars', 'arm', 'mast', 'stram', 'ram'],
+  grön: ['örn', 'rön'],
+  smart: ['mars', 'arm', 'mast', 'stram', 'ram', 'rast'],
 };
 
 export const KEYWORDS = ['snabb', 'enkel', 'trygg', 'grön', 'smart'];

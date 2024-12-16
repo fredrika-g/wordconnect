@@ -14,44 +14,48 @@ let currentWords = [];
 let score = 0;
 let usedAttempts = 0;
 
+// dynamic settings
+let maxPoints;
+let maxAttempts;
+
 // GAME LOGIC
 
 const generateWords = () => {
   // get a keyword
-  const keyword = KEYWORDS[Math.floor(Math.random() * KEYWORDS.length)];
+  // const keyword = KEYWORDS[Math.floor(Math.random() * KEYWORDS.length)];
 
   // returns an object mapping how many instances of each letter in given word
-  const getLetterCount = (word) => {
-    const letterCount = {};
-    for (const letter of word) {
-      letterCount[letter] = (letterCount[letter] || 0) + 1;
-    }
-    return letterCount;
-  };
+  // const getLetterCount = (word) => {
+  //   const letterCount = {};
+  //   for (const letter of word) {
+  //     letterCount[letter] = (letterCount[letter] || 0) + 1;
+  //   }
+  //   return letterCount;
+  // };
 
   // counting the letters in the keyword
-  const keywordLetterCount = getLetterCount(keyword);
+  // const keywordLetterCount = getLetterCount(keyword);
 
   // filter the words that consist of the letters that make up the keyword
-  const words = BASEWORDS.filter((word) => {
-    const wordLetterCount = getLetterCount(word);
+  // const words = BASEWORDS.filter((word) => {
+  //   const wordLetterCount = getLetterCount(word);
 
-    // check that if letter either doesnt exists in keyword, or occurs more times than i the keyword
-    // return false if so
-    for (const letter in wordLetterCount) {
-      if ((keywordLetterCount[letter] || 0) < wordLetterCount[letter]) {
-        return false;
-      }
-    }
+  // check that if letter either doesnt exists in keyword, or occurs more times than i the keyword
+  // return false if so
+  //   for (const letter in wordLetterCount) {
+  //     if ((keywordLetterCount[letter] || 0) < wordLetterCount[letter]) {
+  //       return false;
+  //     }
+  //   }
 
-    return true;
-  });
+  //   return true;
+  // });
 
-  currentWords = words.map((word) => {
-    return { word: word.toUpperCase(), isKeyword: false };
-  });
+  // currentWords = words.map((word) => {
+  //   return { word: word.toUpperCase(), isKeyword: false };
+  // });
 
-  currentWords.push({ word: keyword.toUpperCase(), isKeyword: true });
+  // currentWords.push({ word: keyword.toUpperCase(), isKeyword: true });
 
   // ALT 2
   // get the keys (i.e the keywords)
@@ -67,7 +71,14 @@ const generateWords = () => {
   currentWords = currentWordsLower.map((word) => {
     return word.toUpperCase();
   });
-  console.log(currentWords);
+
+  // limit amount of words, max 4
+  if (currentWords.length > 4) {
+    currentWords = [currentWords[0], ...limitAndShuffleWords()];
+  }
+
+  // game settings for this round
+  setScoreValues();
 };
 
 // generate board
@@ -101,6 +112,22 @@ const generateBoard = () => {
   //   BOARD
   const wordBoard = document.createElement('div');
   wordBoard.id = 'wordBoard';
+
+  currentWords.forEach((word) => {
+    // Skapa en rad för varje ord
+    const row = document.createElement('div');
+    row.className = 'letter-row';
+
+    // Skapa en ruta för varje bokstav
+    for (let i = 0; i < word.length; i++) {
+      const box = document.createElement('div');
+      box.className = 'letter-box';
+      row.appendChild(box);
+    }
+
+    // Lägg till raden i containern
+    wordBoard.appendChild(row);
+  });
 
   //   LETTER CIRCLE
   const letterCircle = document.createElement('div');
@@ -297,20 +324,46 @@ const validateWord = (wordList, word) => {
   return wordList.includes(word);
 };
 const isKeyword = (word) => {
-  const match = currentWords.find(
-    (item) => item.word === word && item.isKeyword === true
-  );
-  return match ? true : false;
+  const index = currentWords.indexOf(word);
+
+  // return true if index of word is 0 (the keyword is always placed a index 0)
+  return index === 0;
+};
+
+const limitAndShuffleWords = () => {
+  // copying currentWords
+  let currentWordsCopy = [...currentWords].splice(1, currentWords.length - 1);
+
+  // shuffle copied and altered array
+  for (let i = currentWordsCopy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [currentWordsCopy[i], currentWordsCopy[j]] = [
+      currentWordsCopy[j],
+      currentWordsCopy[i],
+    ];
+  }
+
+  return currentWordsCopy.splice(0, 3);
 };
 
 const generateScoreBoard = () => {
   // display stats
 
   if (game.querySelector('.attempts')) {
-    game.querySelector('.attempts').innerHTML = usedAttempts;
+    game.querySelector('.attempts').innerHTML =
+      usedAttempts + '/' + maxAttempts;
   }
 
-  game.querySelector('.score').innerHTML = score;
+  game.querySelector('.score').innerHTML = score + '/' + maxPoints;
+};
+
+const setScoreValues = () => {
+  // setting maxpoints to the length of the list of possible words, minus the keyword which is worth more
+  maxPoints = currentWords.length - 1;
+  // adding the point value of the keyword
+  maxPoints += 5;
+
+  maxAttempts = currentWords.length + 3;
 };
 
 // game init

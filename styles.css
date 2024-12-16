@@ -100,7 +100,24 @@ body {
 }
 
 #wordBoard {
-  height: 8rem;
   background-color: lightgreen;
   color: hsla(0, 0%, 100%, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.letter-row {
+  display: flex;
+  gap: 5px;
+}
+
+.letter-box {
+  width: 1.5rem;
+  aspect-ratio: 1;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
 }

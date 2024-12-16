@@ -9,8 +9,10 @@ const finishPage = document.querySelector('#finishPage');
 // game variables/data storage
 
 let currentWords = [];
+let foundWords = [];
 let score = 0;
 let usedAttempts = 0;
+let isWin = false;
 
 // dynamic settings
 let maxPoints;
@@ -262,35 +264,8 @@ const generateLetterCircle = () => {
     isDrawing = false;
 
     const word = currentPath.map((l) => l.letter).join('');
-    if (validateWord(words, word)) {
-      // todo:  score keeping logic ++
-      // todo: attempts logic if enabled
+    validateMove(word);
 
-      // temporary
-      console.log('Correct word, ' + isKeyword(word), word);
-
-      isKeyword(word) ? (score += 5) : score++;
-      if (SETTINGS.attemptsEnabled) {
-        // do logic
-        usedAttempts++;
-      }
-      generateScoreBoard();
-
-      graphics.lineStyle(SETTINGS.letterPicker.lineWidth, 0x00ff00);
-      drawContinuousLine();
-    } else {
-      // todo:  score keeping logic
-      // todo: attempts logic if enabled
-
-      if (SETTINGS.attemptsEnabled) {
-        //do logic
-        usedAttempts++;
-      }
-      generateScoreBoard();
-
-      graphics.lineStyle(SETTINGS.letterPicker.lineWidth, 0xff0000);
-      drawContinuousLine();
-    }
     // reset graphics
     setTimeout(() => graphics.clear(), 1000);
   };
@@ -307,6 +282,61 @@ const generateLetterCircle = () => {
     graphics.strokePath();
   };
 
+  const validateMove = (word) => {
+    // check if attempts are enabled, if true increase attempts used
+    if (SETTINGS.attemptsEnabled) {
+      usedAttempts++;
+    }
+
+    if (validateWord(words, word)) {
+      // todo:  score keeping logic ++
+      // todo: attempts logic if enabled
+
+      // checking if word has already been entered
+      if (foundWords.find((w) => w === word)) {
+        console.log(`Word ${word} already entered`);
+        return null;
+      }
+
+      foundWords.push(word);
+
+      // temporary
+      console.log('Correct word, ' + isKeyword(word), word);
+
+      // add points based on type of word
+      isKeyword(word)
+        ? (score += SETTINGS.pointsPerKeyword)
+        : (score += SETTINGS.pointsPerRegWord);
+
+      // update the scoreboard
+      generateScoreBoard();
+
+      // draw the line
+      graphics.lineStyle(
+        SETTINGS.letterPicker.lineWidth,
+        SETTINGS.letterPicker.lineColor
+      );
+      drawContinuousLine();
+
+      // check if win or lose
+      checkGameStatus();
+    } else {
+      // todo:  score keeping logic
+      // todo: attempts logic if enabled
+
+      generateScoreBoard();
+
+      graphics.lineStyle(
+        SETTINGS.letterPicker.lineWidth,
+        SETTINGS.letterPicker.lineColor
+      );
+      drawContinuousLine();
+
+      // check if win or lose
+      checkGameStatus();
+    }
+  };
+
   const getLetterAt = (x, y) => {
     return letters.find(
       (letter) => Phaser.Math.Distance.Between(letter.x, letter.y, x, y) < 32
@@ -315,6 +345,22 @@ const generateLetterCircle = () => {
 
   // phaser build
   function update() {}
+};
+
+const checkGameStatus = () => {
+  if (
+    SETTINGS.attemptsEnabled &&
+    usedAttempts === maxAttempts &&
+    score < maxPoints
+  ) {
+    isWin = false;
+    displayFinish();
+  }
+
+  if (score === maxPoints) {
+    isWin = true;
+    displayFinish();
+  }
 };
 
 const validateWord = (wordList, word) => {
@@ -359,22 +405,23 @@ const setScoreValues = () => {
   // setting maxpoints to the length of the list of possible words, minus the keyword which is worth more
   maxPoints = currentWords.length - 1;
   // adding the point value of the keyword
-  maxPoints += 5;
+  maxPoints += SETTINGS.pointsPerKeyword;
 
   maxAttempts = currentWords.length + 3;
 };
 
 // game init
 const initGame = () => {
+  // generate words
+  generateWords();
+
   // start game: render game page and contents
 
   startPage.innerHTML = '';
   finishPage.innerHTML = '';
 
   // set active page
-  document.querySelectorAll('.container > .active').forEach((elem) => {
-    elem.classList.remove('active');
-  });
+  removeActive();
 
   gamePage.classList.add('active');
 
@@ -391,9 +438,7 @@ const displayStart = () => {
   finishPage.innerHTML = '';
 
   // set active page
-  document.querySelectorAll('.container > .active').forEach((elem) => {
-    elem.classList.remove('active');
-  });
+  removeActive();
 
   startPage.classList.add('active');
 
@@ -422,12 +467,62 @@ const displayStart = () => {
 
 // FINISH PAGE
 
+const displayFinish = () => {
+  // clear html
+  startPage.innerHTML = '';
+  gamePage.innerHTML = '';
+  // set active page
+  removeActive();
+  finishPage.classList.add('active');
+
+  // creating content
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('wrapper');
+
+  const heading = document.createElement('h1');
+  heading.innerText = isWin ? 'Du klarade det!' : 'Nästan! Försök igen';
+
+  // game stats summary
+  const summary = document.createElement('div');
+  summary.classList.add('summary');
+
+  const pointsStat = document.createElement('div');
+  pointsStat.classList.add('statRow');
+
+  pointsStat.innerHTML = `<span class="currentStat">${score}</span> / ${maxPoints} <span>poäng</span>`;
+
+  summary.append(pointsStat);
+
+  if (SETTINGS.attemptsEnabled) {
+    const attemptsStat = document.createElement('div');
+    attemptsStat.classList.add('statRow');
+    attemptsStat.innerHTML = `<span class="currentStat">${usedAttempts}</span> / ${maxAttempts} <span>försök</span>`;
+    summary.append(attemptsStat);
+  }
+
+  // reset btn/play again
+  const resetBtn = document.createElement('button');
+  resetBtn.classList.add('btn');
+  resetBtn.id = 'resetBtn';
+  resetBtn.innerText = 'Spela igen';
+  resetBtn.addEventListener('click', initGame);
+
+  // appending content
+  wrapper.append(heading, summary, resetBtn);
+  finishPage.append(wrapper);
+};
+
+const removeActive = () => {
+  document.querySelectorAll('.container > .active').forEach((elem) => {
+    elem.classList.remove('active');
+  });
+};
+
 // APPLICATION ENTRY POINT
 const renderPage = () => {
   // show start page
   console.log('START OF APPLICATION');
   displayStart();
-  generateWords();
 };
 
 document.addEventListener('DOMContentLoaded', renderPage);

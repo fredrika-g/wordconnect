@@ -10,6 +10,23 @@
 
   --btn-padding-sm: 0.3em 0.6em;
   --btn-padding-md: 0.5em 1em;
+
+  --clr-primary-900-hsl: 0, 0%, 0%;
+  --clr-primary-800-hsl: 20, 0%, 20%;
+  --clr-primary-700-hsl: 5, 0%, 40%;
+  --clr-primary-100-hsl: 52, 100%, 95%;
+
+  --clr-secondary-900-hsl: 202, 50, 49;
+  --clr-secondary-800-hsl: 196, 52, 49;
+  --clr-secondary-700-hsl: 196, 80, 74;
+  --clr-secondary-600-hsl: 191, 57, 64;
+  --clr-secondary-500-hsl: 191, 71, 82;
+
+  --clr-tertiary-900-hsl: 152, 63%, 28%;
+  --clr-tertiary-800-hsl: 156, 74%, 34%;
+  --clr-tertiary-700-hsl: 146, 47%, 64%;
+  --clr-tertiary-600-hsl: 127, 33%, 82%;
+  --clr-tertiary-500-hsl: 69, 39%, 93%;
 }
 
 body {
@@ -30,7 +47,7 @@ body {
     width: 100%;
 
     /* temporary */
-    background-color: lightblue;
+    background-color: hsla(var(--clr-tertiary-700-hsl), 0.6);
   }
 }
 
@@ -45,6 +62,8 @@ body {
   font-size: var(--font-size-md);
   padding-inline: calc(var(--font-size-md) * 1);
   padding-block: calc(var(--font-size-md) * 0.5);
+  border-radius: 0.5rem;
+  border: 2px solid hsla(var(--clr-tertiary-900-hsl), 1);
 
   cursor: pointer;
 }
@@ -67,13 +86,14 @@ body {
   align-self: center;
   border-radius: 100%;
   aspect-ratio: 1;
-  max-width: 320px;
   width: 100%;
+  max-width: 320px;
   overflow: hidden;
 
   canvas {
     width: 100% !important;
     height: 100% !important;
+    cursor: pointer;
   }
 }
 
@@ -84,7 +104,8 @@ body {
   width: 20px;
   aspect-ratio: 1;
   border-radius: 100%;
-  border: 1px solid black;
+  border: 1px solid hsla(var(--clr-tertiary-800-hsl));
+  color: hsla(var(--clr-tertiary-800-hsl));
   text-align: center;
 
   cursor: pointer;
@@ -95,20 +116,20 @@ body {
 }
 
 #statsDisplay {
-  height: 5rem;
-  background-color: red;
+  background-color: hsla(var(--clr-tertiary-700-hsl), 1);
 
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  padding-block: 0.5rem;
 }
 
 #wordBoard {
-  background-color: lightgreen;
   color: hsla(0, 0%, 100%, 0.5);
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-inline: 1rem;
 }
 
 .letter-row {
@@ -118,10 +139,27 @@ body {
 
 .letter-box {
   width: 1.5rem;
+  width: clamp(2rem, 5vw, 20px);
   aspect-ratio: 1;
-  border: 2px solid black;
+  border: 1px solid hsla(var(--clr-tertiary-900-hsl), 1);
+  background-color: hsla(var(--clr-tertiary-500-hsl), 0.8);
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
+}
+
+#finishPage {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
 }

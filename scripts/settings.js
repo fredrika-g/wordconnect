@@ -2,13 +2,18 @@
 
 const attemptsEnabled = true;
 
+const pointsPerRegWord = 1;
+const pointsPerKeyword = 5;
+
 // graphics
 
 // CHANGE COLOR OF LETTER PICKER: change property "bg"
 const letterPicker = {
-  bg: 0x90ee90,
-  lineWidth: 10,
-  lineColor: 0xffffff,
+  bg: 0x7ad0a0,
+  lineWidth: 15,
+  get lineColor() {
+    return modifyColor(this.bg, 0.95);
+  },
   get bubbleColor() {
     return modifyColor(this.bg);
   },
@@ -22,6 +27,8 @@ const letterPicker = {
 // setting object
 export const SETTINGS = {
   attemptsEnabled,
+  pointsPerKeyword,
+  pointsPerRegWord,
   letterPicker,
 };
 

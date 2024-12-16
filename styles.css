@@ -21,7 +21,7 @@ body {
   margin: 0 auto;
   width: 100%;
   max-width: 500px;
-  height: 100vh;
+  height: 100dvh;
 
   > * {
     display: none;
@@ -58,6 +58,10 @@ body {
 }
 
 /* GAME PAGE */
+
+#game {
+  justify-content: space-between;
+}
 
 #letterCircle {
   align-self: center;

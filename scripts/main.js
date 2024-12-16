@@ -1,11 +1,9 @@
-import { KEYWORDS } from './gameConstants.js';
-import { BASEWORDS } from './gameConstants.js';
-import { keywordsJSON } from './gameConstants.js';
+import { WORDS } from './gameConstants.js';
 
 import { SETTINGS } from './settings.js';
 
 const startPage = document.querySelector('#startPage');
-const game = document.querySelector('#game');
+const gamePage = document.querySelector('#game');
 const finishPage = document.querySelector('#finishPage');
 
 // game variables/data storage
@@ -59,13 +57,13 @@ const generateWords = () => {
 
   // ALT 2
   // get the keys (i.e the keywords)
-  let keywords = Object.keys(keywordsJSON);
+  let keywords = Object.keys(WORDS);
 
   // get random keyword for current game round
   const current = keywords[Math.floor(Math.random() * keywords.length)];
 
   // joining keyword + related words in array
-  const currentWordsLower = [current, ...keywordsJSON[current]];
+  const currentWordsLower = [current, ...WORDS[current]];
 
   // making all words uppercase
   currentWords = currentWordsLower.map((word) => {
@@ -74,7 +72,8 @@ const generateWords = () => {
 
   // limit amount of words, max 4
   if (currentWords.length > 4) {
-    currentWords = [currentWords[0], ...limitAndShuffleWords()];
+    let shuffledWords = shuffleList(currentWords);
+    currentWords = [currentWords[0], ...limitWords(shuffledWords)];
   }
 
   // game settings for this round
@@ -86,7 +85,7 @@ const generateBoard = () => {
   // build the game board
 
   // clearing html
-  game.innerHTML = '';
+  gamePage.innerHTML = '';
 
   //   creating content
 
@@ -134,7 +133,7 @@ const generateBoard = () => {
   letterCircle.id = 'letterCircle';
 
   //   appending content
-  game.append(statsDisplay, helpBtn, wordBoard, letterCircle);
+  gamePage.append(statsDisplay, helpBtn, wordBoard, letterCircle);
 
   //   logic
 };
@@ -165,8 +164,8 @@ const generateLetterCircle = () => {
   let graphics;
   const words = currentWords.map((word) => word);
 
-  // todo: ensure that several of the same letter in a word are taken into account
-  const lettersSet = [...new Set(words.join('').split(''))]; // currently getting unique letters
+  // getting each letter in keyword and placing them in array
+  const lettersSet = Array.from(words[0]);
 
   // phaser build
   function preload() {
@@ -283,8 +282,6 @@ const generateLetterCircle = () => {
       // todo:  score keeping logic
       // todo: attempts logic if enabled
 
-      console.log('Incorrect word:', word);
-
       if (SETTINGS.attemptsEnabled) {
         //do logic
         usedAttempts++;
@@ -330,31 +327,32 @@ const isKeyword = (word) => {
   return index === 0;
 };
 
-const limitAndShuffleWords = () => {
+const limitWords = (wordsList) => {
+  return wordsList.splice(0, 3);
+};
+
+const shuffleList = (arr) => {
   // copying currentWords
-  let currentWordsCopy = [...currentWords].splice(1, currentWords.length - 1);
+  let arrCopy = [...arr].splice(1, arr.length - 1);
 
   // shuffle copied and altered array
-  for (let i = currentWordsCopy.length - 1; i > 0; i--) {
+  for (let i = arrCopy.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [currentWordsCopy[i], currentWordsCopy[j]] = [
-      currentWordsCopy[j],
-      currentWordsCopy[i],
-    ];
+    [arrCopy[i], arrCopy[j]] = [arrCopy[j], arrCopy[i]];
   }
 
-  return currentWordsCopy.splice(0, 3);
+  return arrCopy;
 };
 
 const generateScoreBoard = () => {
   // display stats
 
-  if (game.querySelector('.attempts')) {
-    game.querySelector('.attempts').innerHTML =
+  if (gamePage.querySelector('.attempts')) {
+    gamePage.querySelector('.attempts').innerHTML =
       usedAttempts + '/' + maxAttempts;
   }
 
-  game.querySelector('.score').innerHTML = score + '/' + maxPoints;
+  gamePage.querySelector('.score').innerHTML = score + '/' + maxPoints;
 };
 
 const setScoreValues = () => {
@@ -378,7 +376,7 @@ const initGame = () => {
     elem.classList.remove('active');
   });
 
-  game.classList.add('active');
+  gamePage.classList.add('active');
 
   //   game elements
   generateBoard();
@@ -389,7 +387,7 @@ const initGame = () => {
 // START PAGE
 const displayStart = () => {
   // clear html
-  game.innerHTML = '';
+  gamePage.innerHTML = '';
   finishPage.innerHTML = '';
 
   // set active page
@@ -429,7 +427,6 @@ const renderPage = () => {
   // show start page
   console.log('START OF APPLICATION');
   displayStart();
-  // initGame();
   generateWords();
 };
 

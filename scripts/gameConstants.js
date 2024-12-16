@@ -1,6 +1,6 @@
 // PROVIDED KEYWORDS HERE: FOLLOW GIVEN FORMAT
 
-export const keywordsJSON = {
+export const WORDS = {
   snabb: ['ban', 'bas', 'sa'],
   enkel: ['en', 'len', 'elen', 'klen'],
   trygg: ['try', 'gry', 'gryt'],
@@ -8,7 +8,18 @@ export const keywordsJSON = {
   smart: ['mars', 'arm', 'mast', 'stram', 'ram', 'rast'],
 };
 
-export const KEYWORDS = ['snabb', 'enkel', 'trygg', 'grön', 'smart'];
+// WORDS variable needs to follow this format (an object):
+/**
+ {
+  snabb: ['ban', 'bas', 'sa'],
+  enkel: ['en', 'len', 'elen', 'klen'],
+  trygg: ['try', 'gry', 'gryt'],
+  grön: ['örn', 'rön'],
+  smart: ['mars', 'arm', 'mast', 'stram', 'ram', 'rast'],
+}
+ */
+
+export const keywordsAlt1 = ['snabb', 'enkel', 'trygg', 'grön', 'smart'];
 
 export const BASEWORDS = [
   'sand',

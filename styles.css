@@ -78,7 +78,7 @@ body {
 /* GAME PAGE */
 
 #game {
-  justify-content: space-between;
+  justify-content: space-evenly;
   z-index: 0;
 }
 
@@ -107,6 +107,9 @@ canvas,
   border-radius: 100%;
   background-image: url(https://images.unsplash.com/photo-1720774400690-eaa72ce8c2cf?q=80&w=2346&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
   background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: hsla(0, 0%, 100%, 0.5);
 }
 
 #help {
@@ -160,6 +163,18 @@ canvas,
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
+  transition: background-color 0.3s ease;
+}
+
+.letter-box.filled {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #000;
+}
+
+.letter-box.filled.keyword {
+  background: pink;
+  border-color: hsl(350, 100%, 75%);
 }
 
 #finishPage {

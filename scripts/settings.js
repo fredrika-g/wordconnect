@@ -22,7 +22,6 @@ const letterPicker = {
   get bubbleColor() {
     return modifyColor(this.bg);
   },
-  bubbleColorAlpha: 0.3,
   bubbleBorderWidth: 1,
   get bubbleBorderColor() {
     return modifyColor(this.bubbleColor);

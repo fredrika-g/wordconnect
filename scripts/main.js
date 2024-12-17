@@ -24,6 +24,13 @@ let maxAttempts;
 // GAME LOGIC
 
 const generateWords = () => {
+  // reset points and attempts
+  maxPoints = 0;
+  score = 0;
+
+  maxAttempts = 0;
+  usedAttempts = 0;
+
   // get the keys (i.e the keywords)
   let keywords = Object.keys(WORDS);
 
@@ -40,8 +47,9 @@ const generateWords = () => {
 
   // limit amount of words, max 4
   if (currentWords.length > SETTINGS.maxAmountOfWords) {
-    let shuffledWords = shuffleList(currentWords);
+    let shuffledWords = shuffleList(currentWords, true);
     currentWords = [currentWords[0], ...limitWords(shuffledWords)];
+    console.log(currentWords);
   }
 
   // game settings for this round
@@ -80,10 +88,12 @@ const generateBoard = () => {
   const wordBoard = document.createElement('div');
   wordBoard.id = 'wordBoard';
 
-  currentWords.forEach((word) => {
+  currentWords.forEach((word, i) => {
     // Skapa en rad för varje ord
     const row = document.createElement('div');
     row.className = 'letter-row';
+    // tracking which word in which row (by index)
+    row.dataset.index = i;
 
     // Skapa en ruta för varje bokstav
     for (let i = 0; i < word.length; i++) {
@@ -140,15 +150,11 @@ const generateLetterCircle = () => {
   const words = currentWords.map((word) => word);
 
   // getting each letter in keyword and placing them in array
-  const lettersSet = Array.from(words[0]);
+  const lettersSet = shuffleList(Array.from(words[0]));
 
   // phaser build
   function preload() {
     this.load.image('dot', 'https://via.placeholder.com/10'); // node placeholder
-    // this.load.image(
-    //   'placeholder',
-    //   'https://images.unsplash.com/photo-1720774400690-eaa72ce8c2cf?q=80&w=2346&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    // ); // Ersätt med din bilds sökväg
   }
 
   // phaser build
@@ -159,10 +165,6 @@ const generateLetterCircle = () => {
     const radius = Math.min(width, height) / 2 - 50; // radius based on min dimension minus margin
 
     const angleStep = (2 * Math.PI) / lettersSet.length;
-
-    // === Placera placeholder-bild i mitten ===
-    // const placeholderImageKey = 'placeholder'; // Bildnyckeln från preloader
-    // this.add.image(centerX, centerY, placeholderImageKey).setOrigin(0.5);
 
     const bubbleGraphics = this.add.graphics(); // "letter bubbles" graphic object
     // line graphic object
@@ -195,10 +197,7 @@ const generateLetterCircle = () => {
       bubbleGraphics.strokeCircle(x, y, bubbleSize / 2); // draw the border
 
       // create the circle shaped background for the letter
-      bubbleGraphics.fillStyle(
-        SETTINGS.letterPicker.bubbleColor,
-        SETTINGS.letterPicker.bubbleColorAlpha
-      ); // background color
+      bubbleGraphics.fillStyle(SETTINGS.letterPicker.bubbleColor, 1); // background color
       bubbleGraphics.fillCircle(x, y, bubbleSize / 2); // set circle size
 
       const textStyle = {
@@ -299,8 +298,8 @@ const generateLetterCircle = () => {
       );
       drawContinuousLine();
 
-      // check if win or lose
-      checkGameStatus();
+      // place letters on board
+      placeLetters(word);
     } else {
       // todo:  score keeping logic
       // todo: attempts logic if enabled
@@ -359,9 +358,14 @@ const limitWords = (wordsList) => {
   return wordsList.splice(0, 3);
 };
 
-const shuffleList = (arr) => {
-  // copying currentWords
-  let arrCopy = [...arr].splice(1, arr.length - 1);
+const shuffleList = (arr, removeFirst = false) => {
+  // copying array (splicing first value if removeFirst = true)
+  let arrCopy;
+  if (removeFirst) {
+    arrCopy = [...arr].splice(1, arr.length - 1);
+  } else {
+    arrCopy = [...arr];
+  }
 
   // shuffle copied and altered array
   for (let i = arrCopy.length - 1; i > 0; i--) {
@@ -390,6 +394,35 @@ const setScoreValues = () => {
   maxPoints += SETTINGS.pointsPerKeyword;
 
   maxAttempts = currentWords.length + 3;
+};
+
+const placeLetters = (word) => {
+  const index = currentWords.indexOf(word);
+  const letters = Array.from(word);
+
+  const wordRow = game.querySelector(`div[data-index="${index}"]`);
+
+  const boxes = wordRow.querySelectorAll('div');
+
+  boxes.forEach((box, i) => {
+    box.classList.add('filled');
+    {
+      index === 0 && box.classList.add('keyword');
+    }
+    box.innerHTML = `<span class="letter">${letters[i]}</span>`;
+  });
+
+  const allAreFilled = Array.from(boxes).every((box) =>
+    box.classList.contains('filled')
+  );
+
+  if (allAreFilled) {
+    setTimeout(() => {
+      checkGameStatus();
+    }, 1000);
+  } else {
+    return;
+  }
 };
 
 // game init

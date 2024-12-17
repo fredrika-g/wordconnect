@@ -6,58 +6,24 @@ const startPage = document.querySelector('#startPage');
 const gamePage = document.querySelector('#game');
 const finishPage = document.querySelector('#finishPage');
 
-// game variables/data storage
+// CUSTOMIZABLE SETTINGS HERE
 
+// END OF CUSTOMIZABLE SETTINGS
+
+// game variables/data storage !!! DONT CHANGE
 let currentWords = [];
 let foundWords = [];
 let score = 0;
 let usedAttempts = 0;
 let isWin = false;
 
-// dynamic settings
+// global variables !!! DONT CHANGE
 let maxPoints;
 let maxAttempts;
 
 // GAME LOGIC
 
 const generateWords = () => {
-  // get a keyword
-  // const keyword = KEYWORDS[Math.floor(Math.random() * KEYWORDS.length)];
-
-  // returns an object mapping how many instances of each letter in given word
-  // const getLetterCount = (word) => {
-  //   const letterCount = {};
-  //   for (const letter of word) {
-  //     letterCount[letter] = (letterCount[letter] || 0) + 1;
-  //   }
-  //   return letterCount;
-  // };
-
-  // counting the letters in the keyword
-  // const keywordLetterCount = getLetterCount(keyword);
-
-  // filter the words that consist of the letters that make up the keyword
-  // const words = BASEWORDS.filter((word) => {
-  //   const wordLetterCount = getLetterCount(word);
-
-  // check that if letter either doesnt exists in keyword, or occurs more times than i the keyword
-  // return false if so
-  //   for (const letter in wordLetterCount) {
-  //     if ((keywordLetterCount[letter] || 0) < wordLetterCount[letter]) {
-  //       return false;
-  //     }
-  //   }
-
-  //   return true;
-  // });
-
-  // currentWords = words.map((word) => {
-  //   return { word: word.toUpperCase(), isKeyword: false };
-  // });
-
-  // currentWords.push({ word: keyword.toUpperCase(), isKeyword: true });
-
-  // ALT 2
   // get the keys (i.e the keywords)
   let keywords = Object.keys(WORDS);
 
@@ -73,7 +39,7 @@ const generateWords = () => {
   });
 
   // limit amount of words, max 4
-  if (currentWords.length > 4) {
+  if (currentWords.length > SETTINGS.maxAmountOfWords) {
     let shuffledWords = shuffleList(currentWords);
     currentWords = [currentWords[0], ...limitWords(shuffledWords)];
   }
@@ -134,6 +100,11 @@ const generateBoard = () => {
   const letterCircle = document.createElement('div');
   letterCircle.id = 'letterCircle';
 
+  const imageDiv = document.createElement('div');
+  imageDiv.id = 'imageArea';
+
+  letterCircle.append(imageDiv);
+
   //   appending content
   gamePage.append(statsDisplay, helpBtn, wordBoard, letterCircle);
 
@@ -147,11 +118,9 @@ const generateLetterCircle = () => {
     type: Phaser.AUTO,
     width: '100%',
     height: '100%',
-    backgroundColor: SETTINGS.letterPicker.bg,
-    font: {
-      fontFamily: 'system-ui',
-    },
+    transparent: true,
     parent: 'letterCircle',
+    className: 'picker',
     scene: {
       preload,
       create,
@@ -160,8 +129,12 @@ const generateLetterCircle = () => {
   };
 
   const game = new Phaser.Game(config);
+
+  // saving each letter traced
   let letters = [];
+  // flag to keep track of user action
   let isDrawing = false;
+
   let currentPath = [];
   let graphics;
   const words = currentWords.map((word) => word);
@@ -172,6 +145,10 @@ const generateLetterCircle = () => {
   // phaser build
   function preload() {
     this.load.image('dot', 'https://via.placeholder.com/10'); // node placeholder
+    // this.load.image(
+    //   'placeholder',
+    //   'https://images.unsplash.com/photo-1720774400690-eaa72ce8c2cf?q=80&w=2346&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+    // ); // Ersätt med din bilds sökväg
   }
 
   // phaser build
@@ -182,6 +159,10 @@ const generateLetterCircle = () => {
     const radius = Math.min(width, height) / 2 - 50; // radius based on min dimension minus margin
 
     const angleStep = (2 * Math.PI) / lettersSet.length;
+
+    // === Placera placeholder-bild i mitten ===
+    // const placeholderImageKey = 'placeholder'; // Bildnyckeln från preloader
+    // this.add.image(centerX, centerY, placeholderImageKey).setOrigin(0.5);
 
     const bubbleGraphics = this.add.graphics(); // "letter bubbles" graphic object
     // line graphic object
@@ -221,9 +202,9 @@ const generateLetterCircle = () => {
       bubbleGraphics.fillCircle(x, y, bubbleSize / 2); // set circle size
 
       const textStyle = {
-        fontFamily: 'Arial',
+        fontFamily: SETTINGS.letterPicker.fontFamily,
         fontSize: `${bubbleSize / 2}px`, //adjusting the font size dynamically
-        color: '#fff',
+        color: SETTINGS.letterPicker.letterColor,
         fontStyle: 'bold',
         align: 'center',
       };
@@ -323,6 +304,7 @@ const generateLetterCircle = () => {
     } else {
       // todo:  score keeping logic
       // todo: attempts logic if enabled
+      console.log('Incorrect word', word);
 
       generateScoreBoard();
 
@@ -521,7 +503,6 @@ const removeActive = () => {
 // APPLICATION ENTRY POINT
 const renderPage = () => {
   // show start page
-  console.log('START OF APPLICATION');
   displayStart();
 };
 

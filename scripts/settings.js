@@ -1,9 +1,14 @@
 // GAME SETTINGS
 
+// Set if attempts should be enabled below: true = yes, false = no
 const attemptsEnabled = true;
 
+// Set points value per regular word below
 const pointsPerRegWord = 1;
+// Set points value per keyword below
 const pointsPerKeyword = 5;
+// Set max amount of words on board below
+const maxAmountOfWords = 4;
 
 // graphics
 
@@ -12,7 +17,7 @@ const letterPicker = {
   bg: 0x7ad0a0,
   lineWidth: 15,
   get lineColor() {
-    return modifyColor(this.bg, 0.95);
+    return modifyColor(this.bg, 1.1);
   },
   get bubbleColor() {
     return modifyColor(this.bg);
@@ -22,6 +27,8 @@ const letterPicker = {
   get bubbleBorderColor() {
     return modifyColor(this.bubbleColor);
   },
+  letterColor: '#fff',
+  fontFamily: 'Arial',
 };
 
 // setting object
@@ -29,6 +36,7 @@ export const SETTINGS = {
   attemptsEnabled,
   pointsPerKeyword,
   pointsPerRegWord,
+  maxAmountOfWords,
   letterPicker,
 };
 

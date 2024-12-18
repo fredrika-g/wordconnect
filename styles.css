@@ -93,7 +93,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 3rem;
+    gap: 1.5rem;
   }
 
   @media (orientation: landscape) {
@@ -266,7 +266,7 @@ canvas,
 }
 
 .letter-box {
-  width: clamp(2rem, 15vw, 50px);
+  width: clamp(2rem, 10vw, 35px);
   aspect-ratio: 1;
   border: 1px solid hsla(var(--clr-tertiary-900-hsl), 1);
   background-color: hsla(var(--clr-tertiary-500-hsl), 0.8);

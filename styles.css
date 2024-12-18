@@ -48,6 +48,11 @@ body {
     /* temporary */
     background-color: hsla(var(--clr-tertiary-700-hsl), 0.6);
   }
+
+  @media (orientation: landscape) {
+    max-width: 100%;
+    height: 100svh;
+  }
 }
 
 .container > .active {
@@ -80,6 +85,20 @@ body {
 #game {
   justify-content: space-evenly;
   z-index: 0;
+
+  .groupedContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  @media (orientation: landscape) {
+    .groupedContent {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
 }
 
 #letterCircle {
@@ -116,18 +135,77 @@ canvas,
   position: absolute;
   right: 0;
   top: 0;
-  width: 20px;
+  width: 2rem;
   aspect-ratio: 1;
   border-radius: 100%;
-  border: 1px solid hsla(var(--clr-tertiary-800-hsl));
+  border: 2px solid hsla(var(--clr-tertiary-800-hsl));
   color: hsla(var(--clr-tertiary-800-hsl));
   text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
 
   cursor: pointer;
 }
 
 #help::after {
   content: '\003F';
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: inherit;
+  background: rgba(0, 0, 0, 0.5);
+  display: none; /* hidden as standard */
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1.2rem;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+
+  p {
+    text-align: start;
+    max-width: 75%;
+    margin: 1rem auto;
+    font-size: 1.5rem;
+    line-height: 1.5;
+  }
+}
+
+.close-modal-btn {
+  color: #000;
+  font-weight: bold;
+  font-size: 1.7rem;
+  border: none;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+
+  cursor: pointer;
+}
+
+.close-modal-btn::after {
+  content: '\2717';
+}
+/* Responsiv design */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 15px;
+  }
 }
 
 #statsDisplay {

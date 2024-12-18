@@ -8,6 +8,9 @@ const finishPage = document.querySelector('#finishPage');
 
 // CUSTOMIZABLE SETTINGS HERE
 
+const instructions = `Fyll i de tomma rutorna på brädet genom att forma ord av bokstäverna i cirkeln! 
+Du har ett begränsat antal försök på dig att hitta alla ord, och din utmaning är att bli klar innan dina försök tar slut. `;
+
 // END OF CUSTOMIZABLE SETTINGS
 
 // game variables/data storage !!! DONT CHANGE
@@ -20,6 +23,7 @@ let isWin = false;
 // global variables !!! DONT CHANGE
 let maxPoints;
 let maxAttempts;
+let modal = document.createElement('div');
 
 // GAME LOGIC
 
@@ -83,6 +87,7 @@ const generateBoard = () => {
   //   HELP BUTTON
   const helpBtn = document.createElement('div');
   helpBtn.id = 'help';
+  helpBtn.addEventListener('click', toggleModal);
 
   //   BOARD
   const wordBoard = document.createElement('div');
@@ -115,12 +120,19 @@ const generateBoard = () => {
 
   letterCircle.append(imageDiv);
 
+  // grouping content for responsive design
+  const groupedContent = document.createElement('div');
+  groupedContent.classList.add('groupedContent');
+
+  groupedContent.append(wordBoard, letterCircle);
+
   //   appending content
-  gamePage.append(statsDisplay, helpBtn, wordBoard, letterCircle);
+  gamePage.append(statsDisplay, helpBtn, groupedContent);
 
   //   logic
 };
 
+// generate letter picker
 const generateLetterCircle = () => {
   // build the letter picker
 
@@ -328,6 +340,7 @@ const generateLetterCircle = () => {
   function update() {}
 };
 
+// check if win or loss
 const checkGameStatus = () => {
   if (
     SETTINGS.attemptsEnabled &&
@@ -344,9 +357,12 @@ const checkGameStatus = () => {
   }
 };
 
+// validate a word
 const validateWord = (wordList, word) => {
   return wordList.includes(word);
 };
+
+// check if word is keyword
 const isKeyword = (word) => {
   const index = currentWords.indexOf(word);
 
@@ -354,10 +370,12 @@ const isKeyword = (word) => {
   return index === 0;
 };
 
+// limit amount of words per round
 const limitWords = (wordsList) => {
   return wordsList.splice(0, 3);
 };
 
+// helper: shuffle an array
 const shuffleList = (arr, removeFirst = false) => {
   // copying array (splicing first value if removeFirst = true)
   let arrCopy;
@@ -376,6 +394,7 @@ const shuffleList = (arr, removeFirst = false) => {
   return arrCopy;
 };
 
+// update the scoreboard
 const generateScoreBoard = () => {
   // display stats
 
@@ -387,6 +406,7 @@ const generateScoreBoard = () => {
   gamePage.querySelector('.score').innerHTML = score + '/' + maxPoints;
 };
 
+// calculate the max points and max attempts based on amount of words
 const setScoreValues = () => {
   // setting maxpoints to the length of the list of possible words, minus the keyword which is worth more
   maxPoints = currentWords.length - 1;
@@ -396,6 +416,7 @@ const setScoreValues = () => {
   maxAttempts = currentWords.length + 3;
 };
 
+// place letters on board
 const placeLetters = (word) => {
   const index = currentWords.indexOf(word);
   const letters = Array.from(word);
@@ -425,6 +446,39 @@ const placeLetters = (word) => {
   }
 };
 
+const createModal = () => {
+  modal.classList.add('modal-overlay');
+  modal.id = 'modal';
+
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal-content');
+
+  const heading = document.createElement('h2');
+  heading.innerText = 'Så här spelar du';
+  const text = document.createElement('p');
+  text.innerText = instructions;
+
+  const closeBtn = document.createElement('div');
+  closeBtn.classList.add('close-modal-btn');
+  closeBtn.addEventListener('click', toggleModal);
+
+  modalContent.append(heading, text, closeBtn);
+
+  modal.append(modalContent);
+
+  gamePage.append(modal);
+};
+
+const toggleModal = () => {
+  const isOpen = modal.style.display === 'flex';
+
+  if (isOpen) {
+    modal.style.display = 'none';
+  } else {
+    modal.style.display = 'flex';
+  }
+};
+
 // game init
 const initGame = () => {
   // generate words
@@ -444,6 +498,7 @@ const initGame = () => {
   generateBoard();
   generateLetterCircle();
   generateScoreBoard();
+  createModal();
 };
 
 // START PAGE

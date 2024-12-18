@@ -8,8 +8,31 @@ const finishPage = document.querySelector('#finishPage');
 
 // CUSTOMIZABLE SETTINGS HERE
 
+// the title/name of the game
+const appTitle = 'Word Connect';
+// game instructions
 const instructions = `Fyll i de tomma rutorna på brädet genom att forma ord av bokstäverna i cirkeln! 
 Du har ett begränsat antal försök på dig att hitta alla ord, och din utmaning är att bli klar innan dina försök tar slut. `;
+
+// start button text content
+const startBtnText = 'Starta';
+
+// reset btn text content (on finish page)
+const resetBtnText = 'Spela igen';
+
+// win message
+const winMsg = 'Du klarade det!';
+
+// lose message
+const loseMsg = 'Nästan! Försök igen';
+
+// help page heading text
+const helpHeadingText = 'Så här spelar du';
+
+// "points" text
+const pointsText = 'poäng';
+// "attempts" text
+const attemptsText = 'försök';
 
 // END OF CUSTOMIZABLE SETTINGS
 
@@ -94,20 +117,20 @@ const generateBoard = () => {
   wordBoard.id = 'wordBoard';
 
   currentWords.forEach((word, i) => {
-    // Skapa en rad för varje ord
+    // create a row for each word
     const row = document.createElement('div');
     row.className = 'letter-row';
     // tracking which word in which row (by index)
     row.dataset.index = i;
 
-    // Skapa en ruta för varje bokstav
+    // create a box for each letter
     for (let i = 0; i < word.length; i++) {
       const box = document.createElement('div');
       box.className = 'letter-box';
       row.appendChild(box);
     }
 
-    // Lägg till raden i containern
+    // append row to board
     wordBoard.appendChild(row);
   });
 
@@ -128,8 +151,6 @@ const generateBoard = () => {
 
   //   appending content
   gamePage.append(statsDisplay, helpBtn, groupedContent);
-
-  //   logic
 };
 
 // generate letter picker
@@ -263,7 +284,6 @@ const generateLetterCircle = () => {
   };
 
   const drawContinuousLine = () => {
-    // graphics.clear();
     graphics.beginPath();
     if (currentPath.length > 0) {
       graphics.moveTo(currentPath[0].x, currentPath[0].y);
@@ -281,9 +301,6 @@ const generateLetterCircle = () => {
     }
 
     if (validateWord(words, word)) {
-      // todo:  score keeping logic ++
-      // todo: attempts logic if enabled
-
       // checking if word has already been entered
       if (foundWords.find((w) => w === word)) {
         console.log(`Word ${word} already entered`);
@@ -291,9 +308,6 @@ const generateLetterCircle = () => {
       }
 
       foundWords.push(word);
-
-      // temporary
-      console.log('Correct word, ' + isKeyword(word), word);
 
       // add points based on type of word
       isKeyword(word)
@@ -313,10 +327,6 @@ const generateLetterCircle = () => {
       // place letters on board
       placeLetters(word);
     } else {
-      // todo:  score keeping logic
-      // todo: attempts logic if enabled
-      console.log('Incorrect word', word);
-
       generateScoreBoard();
 
       graphics.lineStyle(
@@ -399,11 +409,14 @@ const generateScoreBoard = () => {
   // display stats
 
   if (gamePage.querySelector('.attempts')) {
-    gamePage.querySelector('.attempts').innerHTML =
-      usedAttempts + '/' + maxAttempts;
+    gamePage.querySelector(
+      '.attempts'
+    ).innerHTML = `<span>${attemptsText}</span> <div><span>${usedAttempts}</span> / <span>${maxAttempts}</span></div>`;
   }
 
-  gamePage.querySelector('.score').innerHTML = score + '/' + maxPoints;
+  gamePage.querySelector(
+    '.score'
+  ).innerHTML = `<span>${pointsText}</span> <div><span>${score}</span> / <span>${maxPoints}</span></div>`;
 };
 
 // calculate the max points and max attempts based on amount of words
@@ -450,12 +463,20 @@ const createModal = () => {
   modal.classList.add('modal-overlay');
   modal.id = 'modal';
 
+  // Dölj modalen vid klick utanför innehållet
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      toggleModal();
+    }
+  });
+
   const modalContent = document.createElement('div');
   modalContent.classList.add('modal-content');
 
   const heading = document.createElement('h2');
-  heading.innerText = 'Så här spelar du';
+  heading.innerText = helpHeadingText;
   const text = document.createElement('p');
+  text.classList.add('instructions');
   text.innerText = instructions;
 
   const closeBtn = document.createElement('div');
@@ -515,17 +536,17 @@ const displayStart = () => {
   // create content
   // 1. title
   const titleElem = document.createElement('h1');
-  titleElem.innerText = 'Word Connect';
+  titleElem.innerText = appTitle;
   titleElem.id = 'title';
 
   // 2. instructions
   const instructionsElem = document.createElement('p');
-  instructionsElem.innerText = 'lorem ipsum blablabla';
+  instructionsElem.innerText = instructions;
   instructionsElem.classList.add('instructions');
 
   // 3. start btn
   const startBtn = document.createElement('button');
-  startBtn.innerText = 'Starta';
+  startBtn.innerText = startBtnText;
   startBtn.id = 'startBtn';
   startBtn.classList.add('btn');
   startBtn.addEventListener('click', initGame);
@@ -550,7 +571,7 @@ const displayFinish = () => {
   wrapper.classList.add('wrapper');
 
   const heading = document.createElement('h1');
-  heading.innerText = isWin ? 'Du klarade det!' : 'Nästan! Försök igen';
+  heading.innerText = isWin ? winMsg : loseMsg;
 
   // game stats summary
   const summary = document.createElement('div');
@@ -559,14 +580,14 @@ const displayFinish = () => {
   const pointsStat = document.createElement('div');
   pointsStat.classList.add('statRow');
 
-  pointsStat.innerHTML = `<span class="currentStat">${score}</span> / ${maxPoints} <span>poäng</span>`;
+  pointsStat.innerHTML = `<span class="currentStat">${score}</span> / ${maxPoints} <span>${pointsText}</span>`;
 
   summary.append(pointsStat);
 
   if (SETTINGS.attemptsEnabled) {
     const attemptsStat = document.createElement('div');
     attemptsStat.classList.add('statRow');
-    attemptsStat.innerHTML = `<span class="currentStat">${usedAttempts}</span> / ${maxAttempts} <span>försök</span>`;
+    attemptsStat.innerHTML = `<span class="currentStat">${usedAttempts}</span> / ${maxAttempts} <span>${attemptsText}</span>`;
     summary.append(attemptsStat);
   }
 
@@ -574,7 +595,7 @@ const displayFinish = () => {
   const resetBtn = document.createElement('button');
   resetBtn.classList.add('btn');
   resetBtn.id = 'resetBtn';
-  resetBtn.innerText = 'Spela igen';
+  resetBtn.innerText = resetBtnText;
   resetBtn.addEventListener('click', initGame);
 
   // appending content

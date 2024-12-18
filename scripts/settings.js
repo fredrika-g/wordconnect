@@ -10,23 +10,35 @@ const pointsPerKeyword = 5;
 // Set max amount of words on board below
 const maxAmountOfWords = 4;
 
-// graphics
+// graphics settings
+const pickerTextColor = '#fff'; // the color of the letters in the letter picker
 
-// CHANGE COLOR OF LETTER PICKER: change property "bg"
+// end of graphics settings
+
+const appStyles = window.getComputedStyle(document.querySelector(':root'));
+
+// retrieving value from styles.css to set color of letter picker
+const primaryColorHex = appStyles.getPropertyValue('--primary-color');
+// converting from hex to numerical, as accepted by phaser
+const primaryColorConv = `0x${primaryColorHex.slice(
+  1,
+  primaryColorHex.length
+)}`;
+
 const letterPicker = {
-  bg: 0x7ad0a0,
+  primary: primaryColorConv,
   lineWidth: 15,
   get lineColor() {
-    return modifyColor(this.bg, 1.1);
+    return modifyColor(this.primary);
   },
   get bubbleColor() {
-    return modifyColor(this.bg);
+    return modifyColor(this.primary);
   },
   bubbleBorderWidth: 1,
   get bubbleBorderColor() {
     return modifyColor(this.bubbleColor);
   },
-  letterColor: '#fff',
+  letterColor: pickerTextColor,
   fontFamily: 'Arial',
 };
 

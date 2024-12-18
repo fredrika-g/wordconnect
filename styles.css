@@ -27,6 +27,8 @@
   --clr-tertiary-700-hsl: 146, 47%, 64%;
   --clr-tertiary-600-hsl: 127, 33%, 82%;
   --clr-tertiary-500-hsl: 69, 39%, 93%;
+
+  --primary-color: #7ad0a0;
 }
 
 body {
@@ -124,7 +126,7 @@ canvas,
   z-index: -1;
 
   border-radius: 100%;
-  background-image: url(https://images.unsplash.com/photo-1720774400690-eaa72ce8c2cf?q=80&w=2346&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-image: url(https://images.unsplash.com/photo-1565071559227-20ab25b7685e?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -174,14 +176,6 @@ canvas,
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
   position: relative;
-
-  p {
-    text-align: start;
-    max-width: 75%;
-    margin: 1rem auto;
-    font-size: 1.5rem;
-    line-height: 1.5;
-  }
 }
 
 .close-modal-btn {
@@ -215,6 +209,25 @@ canvas,
   justify-content: space-evenly;
   align-items: center;
   padding-block: 0.5rem;
+
+  .attempts,
+  .score {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    > span {
+      text-transform: capitalize;
+      font-weight: normal;
+    }
+  }
+
+  span {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
 }
 
 #wordBoard {
@@ -266,5 +279,32 @@ canvas,
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+
+    .statRow {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+
+      span {
+        font-weight: bold;
+        font-size: 1.8rem;
+      }
+
+      .currentStat {
+        line-height: 1;
+        font-size: 3rem;
+      }
+    }
   }
+}
+
+.instructions {
+  text-align: start;
+  width: 75%;
+  max-width: 600px;
+  margin: 1rem auto;
+  font-size: 1.5rem;
+  line-height: 1.5;
 }

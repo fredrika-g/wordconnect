@@ -34,7 +34,13 @@ const pointsText = 'poäng';
 // "attempts" text
 const attemptsText = 'försök';
 
+// wave thickness
+const waveThickness = 10;
+const waveColor = '#fff';
+
 // END OF CUSTOMIZABLE SETTINGS
+
+/* -------------------------------------------- */
 
 // game variables/data storage !!! DONT CHANGE
 let currentWords = [];
@@ -72,13 +78,14 @@ const generateWords = () => {
     return word.toUpperCase();
   });
 
-  // limit amount of words, max 4
+  // limit amount of words
   if (currentWords.length > SETTINGS.maxAmountOfWords) {
     let shuffledWords = shuffleList(currentWords, true);
     currentWords = [currentWords[0], ...limitWords(shuffledWords)];
     console.log(currentWords);
   }
 
+  console.log(currentWords);
   // game settings for this round
   setScoreValues();
 };
@@ -93,6 +100,9 @@ const generateBoard = () => {
   //   creating content
 
   //   STATS
+  const statsWrapper = document.createElement('div');
+  statsWrapper.classList.add('statsWrapper');
+
   const statsDisplay = document.createElement('div');
   statsDisplay.id = 'statsDisplay';
 
@@ -106,6 +116,13 @@ const generateBoard = () => {
   const scoreSpan = document.createElement('span');
   scoreSpan.classList.add('score');
   statsDisplay.append(scoreSpan);
+
+  statsWrapper.append(statsDisplay);
+
+  // adding wavey line as decoration
+  statsWrapper.innerHTML += `<svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+    <path fill="none" stroke=${waveColor} stroke-width="${waveThickness}" d="M0,50 C100,90 200,10 300,50 C400,90 500,10 600,50 C700,90 800,10 900,50 C1000,90 1100,10 1200,50 C1300,90 1400,10 1440,50"></path>
+  </svg>`;
 
   //   HELP BUTTON
   const helpBtn = document.createElement('div');
@@ -150,7 +167,7 @@ const generateBoard = () => {
   groupedContent.append(wordBoard, letterCircle);
 
   //   appending content
-  gamePage.append(statsDisplay, helpBtn, groupedContent);
+  gamePage.append(statsWrapper, helpBtn, groupedContent);
 };
 
 // generate letter picker

@@ -7,8 +7,8 @@ const attemptsEnabled = true;
 const pointsPerRegWord = 1;
 // Set points value per keyword below
 const pointsPerKeyword = 5;
-// Set max amount of words on board below
-const maxAmountOfWords = 4;
+// Set max amount of words on board below, recommended max = 5
+const maxAmountOfWords = 5;
 
 // graphics settings
 const pickerTextColor = '#fff'; // the color of the letters in the letter picker

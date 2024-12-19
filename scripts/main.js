@@ -195,7 +195,6 @@ const generateLetterCircle = () => {
     height: '100%',
     transparent: true,
     parent: 'letterCircle',
-    className: 'picker',
     scene: {
       preload,
       create,
@@ -219,7 +218,14 @@ const generateLetterCircle = () => {
 
   // phaser build
   function preload() {
-    this.load.image('dot', 'https://via.placeholder.com/10'); // node placeholder
+    this.load.image('dot', '../assets/dot.png'); // node placeholder
+
+    //  If local assets is not used: generate a node placeholder dynamically !!!
+
+    // debug loading error
+    this.load.on('loaderror', (file) => {
+      console.error(`Failed to load file: ${file.key}`, file.src);
+    });
   }
 
   // phaser build
@@ -332,13 +338,16 @@ const generateLetterCircle = () => {
       usedAttempts++;
     }
 
+    // checking if entered word is is word list
     if (validateWord(words, word)) {
       // checking if word has already been entered
       if (foundWords.find((w) => w === word)) {
         console.log(`Word ${word} already entered`);
+        // do nothing if word has already been entered, exit out
         return null;
       }
 
+      // push word to the list of found words
       foundWords.push(word);
 
       // add points based on type of word
@@ -359,6 +368,7 @@ const generateLetterCircle = () => {
       // place letters on board
       placeLetters(word);
     } else {
+      // if word is not a valid word
       generateScoreBoard();
 
       graphics.lineStyle(
@@ -546,7 +556,6 @@ const initGame = () => {
 
   // set active page
   removeActive();
-
   gamePage.classList.add('active');
 
   //   game elements
@@ -563,7 +572,6 @@ const displayStart = () => {
 
   // set active page
   removeActive();
-
   startPage.classList.add('active');
 
   // create content
@@ -586,7 +594,6 @@ const displayStart = () => {
 
   // append content on page
   startPage.append(titleElem, instructionsElem, startBtn);
-  startPage.classList.add('active');
 };
 
 // FINISH PAGE
@@ -636,6 +643,7 @@ const displayFinish = () => {
   finishPage.append(wrapper);
 };
 
+// function that removes .active class on all relevant elements
 const removeActive = () => {
   document.querySelectorAll('.container > .active').forEach((elem) => {
     elem.classList.remove('active');

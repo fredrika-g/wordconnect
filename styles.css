@@ -63,7 +63,6 @@ body {
   }
 }
 
-/* Hantera små skärmar specifikt */
 @media (max-width: 600px) {
   .container {
     padding: calc(env(safe-area-inset-top) + 1rem)
@@ -73,24 +72,24 @@ body {
   }
 
   .container > .active h1 {
-    font-size: var(--font-size-md); /* Anpassa storlek för rubriker */
+    font-size: var(--font-size-md);
   }
 
   .container > .active p {
-    font-size: var(--font-size-sm); /* Anpassa storlek för text */
-    line-height: 1.5; /* Förbättra läsbarheten */
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
   }
 
   .btn {
-    font-size: var(--font-size-sm); /* Mindre knappar */
+    font-size: var(--font-size-sm);
     padding-inline: var(--btn-padding-sm);
   }
 }
 
-/* Full bredd vid landscape mode på mindre skärmar */
+/* full width when in landscape mode on smaller screens */
 @media (orientation: landscape) and (width < 1024px) {
   .container {
-    max-width: 100%; /* Ta upp hela bredden */
+    max-width: 100%;
   }
 
   .groupedContent {
@@ -98,7 +97,7 @@ body {
   }
 }
 
-/* Återgå till maxbredd 500px vid större enheter även i landscape */
+/* return to standard max width when on bigger screens even in landscape */
 @media (orientation: landscape) and (width > 1025px) {
   .container {
     max-width: 500px;
@@ -117,6 +116,12 @@ body {
     word-break: break-word;
     overflow-wrap: anywhere;
     text-align: center;
+  }
+}
+
+@media (width > 400px) {
+  .container > .active p {
+    text-align: start;
   }
 }
 
@@ -172,6 +177,10 @@ body {
     #letterCircle {
       width: clamp(6rem, 75vw, 270px);
     }
+
+    .groupedContent {
+      padding-bottom: 1rem;
+    }
   }
 
   @media (width < 400px) {
@@ -187,7 +196,7 @@ body {
     }
 
     #help {
-      top: 40px;
+      top: 25px;
     }
   }
 
@@ -297,7 +306,7 @@ canvas,
 .close-modal-btn::after {
   content: '\2717';
 }
-/* Responsiv design */
+
 @media (max-width: 768px) {
   .modal-content {
     padding: 15px;
@@ -432,7 +441,7 @@ canvas,
 
       .currentStat {
         line-height: 1;
-        font-size: 3rem;
+        font-size: 2.5rem;
       }
     }
   }

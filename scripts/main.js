@@ -11,7 +11,7 @@ const finishPage = document.querySelector('#finishPage');
 // the title/name of the game
 const appTitle = 'Word Connect';
 // game instructions
-const instructions = `Fyll i de tomma rutorna på brädet genom att forma ord av bokstäverna i cirkeln! 
+const instructions = `Fyll i de tomma rutorna på brädet genom att dra en linje mellan bokstäverna i cirkeln så att ord formas! 
 Du har ett begränsat antal försök på dig att hitta alla ord, och din utmaning är att bli klar innan dina försök tar slut. `;
 
 // start button text content
@@ -25,6 +25,9 @@ const winMsg = 'Du klarade det!';
 
 // lose message
 const loseMsg = 'Nästan! Försök igen';
+
+// x "out of" y: set "out of" value
+const outOf = 'av';
 
 // help page heading text
 const helpHeadingText = 'Så här spelar du';
@@ -598,14 +601,14 @@ const displayFinish = () => {
   const pointsStat = document.createElement('div');
   pointsStat.classList.add('statRow');
 
-  pointsStat.innerHTML = `<span class="currentStat">${score}</span> / ${maxPoints} <span>${pointsText}</span>`;
+  pointsStat.innerHTML = `<span class="currentStat">${score}</span> ${outOf} ${maxPoints} <span>${pointsText}</span>`;
 
   summary.append(pointsStat);
 
   if (SETTINGS.attemptsEnabled) {
     const attemptsStat = document.createElement('div');
     attemptsStat.classList.add('statRow');
-    attemptsStat.innerHTML = `<span class="currentStat">${usedAttempts}</span> / ${maxAttempts} <span>${attemptsText}</span>`;
+    attemptsStat.innerHTML = `<span class="currentStat">${usedAttempts}</span> ${outOf} ${maxAttempts} <span>${attemptsText}</span>`;
     summary.append(attemptsStat);
   }
 

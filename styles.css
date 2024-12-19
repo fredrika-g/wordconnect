@@ -382,6 +382,7 @@ canvas,
   border-radius: 2px;
 
   font-size: 1.2rem;
+  color: #000;
 
   display: flex;
   align-items: center;
@@ -407,7 +408,6 @@ canvas,
 .letter-box.filled {
   background-color: #d4edda;
   border-color: #28a745;
-  color: #000;
 }
 
 .letter-box.filled.keyword {

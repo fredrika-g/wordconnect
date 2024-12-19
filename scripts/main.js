@@ -143,10 +143,22 @@ const generateBoard = () => {
     // tracking which word in which row (by index)
     row.dataset.index = i;
 
+    // insert hint: one given letter if enabled
+    const hintIndex = Math.floor(Math.random() * word.length); // getting index of a randm letter in word
+
     // create a box for each letter
-    for (let i = 0; i < word.length; i++) {
+    for (let j = 0; j < word.length; j++) {
       const box = document.createElement('div');
       box.className = 'letter-box';
+
+      if (SETTINGS.hintsEnabled) {
+        // if index of letter matches index of the hint, set is a clue
+        if (j === hintIndex) {
+          box.textContent = word[j];
+          box.classList.add('hint');
+        }
+      }
+
       row.appendChild(box);
     }
 

@@ -3,6 +3,9 @@
 // Set if attempts should be enabled below: true = yes, false = no
 const attemptsEnabled = true;
 
+// Set if hints should be enabled below: true = yes, false = no
+const hintsEnabled = true;
+
 // Set points value per regular word below
 const pointsPerRegWord = 1;
 // Set points value per keyword below
@@ -45,6 +48,7 @@ const letterPicker = {
 // setting object
 export const SETTINGS = {
   attemptsEnabled,
+  hintsEnabled,
   pointsPerKeyword,
   pointsPerRegWord,
   maxAmountOfWords,

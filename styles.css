@@ -31,16 +31,27 @@
   --primary-color: #7ad0a0;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   margin: 0 auto;
   width: 100%;
   max-width: 500px;
   height: 100dvh;
+  overflow: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
 
   > * {
     display: none;
@@ -50,10 +61,47 @@ body {
     /* temporary */
     background-color: hsla(var(--clr-tertiary-700-hsl), 0.6);
   }
+}
 
-  @media (orientation: landscape) {
-    max-width: 100%;
-    height: 100svh;
+/* Hantera små skärmar specifikt */
+@media (max-width: 600px) {
+  .container {
+    padding: calc(env(safe-area-inset-top) + 1rem)
+      calc(env(safe-area-inset-right) + 0.5rem)
+      calc(env(safe-area-inset-bottom) + 1rem)
+      calc(env(safe-area-inset-left) + 0.5rem);
+  }
+
+  .container > .active h1 {
+    font-size: var(--font-size-md); /* Anpassa storlek för rubriker */
+  }
+
+  .container > .active p {
+    font-size: var(--font-size-sm); /* Anpassa storlek för text */
+    line-height: 1.5; /* Förbättra läsbarheten */
+  }
+
+  .btn {
+    font-size: var(--font-size-sm); /* Mindre knappar */
+    padding-inline: var(--btn-padding-sm);
+  }
+}
+
+/* Full bredd vid landscape mode på mindre skärmar */
+@media (orientation: landscape) and (width < 1024px) {
+  .container {
+    max-width: 100%; /* Ta upp hela bredden */
+  }
+
+  .groupedContent {
+    padding-inline: 1rem;
+  }
+}
+
+/* Återgå till maxbredd 500px vid större enheter även i landscape */
+@media (orientation: landscape) and (width > 1025px) {
+  .container {
+    max-width: 500px;
   }
 }
 
@@ -61,6 +109,15 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
+
+  h1,
+  p,
+  .btn {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
 }
 
 .btn {
@@ -100,16 +157,48 @@ body {
 
   @media (orientation: landscape) {
     gap: 0;
+
     .groupedContent {
       flex-direction: row;
       align-items: center;
+      gap: 0;
+      padding-inline: 1rem;
     }
+  }
+  @media (width < 600px) {
+    #statsDisplay {
+      padding-bottom: 1.5rem;
+    }
+    #letterCircle {
+      width: clamp(6rem, 75vw, 270px);
+    }
+  }
 
-    @media (max-width: 600px) {
-      #statsDisplay {
-        padding-bottom: 1.5rem;
+  @media (width < 400px) {
+    #statsDisplay {
+      .attempts,
+      .score {
+        flex-direction: row;
+        padding-top: 3rem;
       }
     }
+    .wave {
+      height: 1rem;
+    }
+
+    #help {
+      top: 40px;
+    }
+  }
+
+  @media (width < 321px) {
+    .wave {
+      display: none;
+    }
+  }
+
+  @media (width > 600px) {
+    gap: 2rem;
   }
 }
 
@@ -267,7 +356,7 @@ canvas,
   color: hsla(0, 0%, 100%, 0.5);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.8rem;
   padding-inline: 1rem;
 }
 
@@ -277,7 +366,7 @@ canvas,
 }
 
 .letter-box {
-  width: clamp(2rem, 10vw, 35px);
+  width: 1.8rem;
   aspect-ratio: 1;
   border: 1px solid hsla(var(--clr-tertiary-900-hsl), 1);
   background-color: hsla(var(--clr-tertiary-500-hsl), 0.8);
@@ -290,6 +379,20 @@ canvas,
   justify-content: center;
   text-transform: uppercase;
   transition: background-color 0.3s ease;
+}
+
+@media (width < 400px) {
+  .letter-box {
+    width: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  #statsDisplay {
+    padding: 0;
+    span {
+      font-size: 1.1rem;
+    }
+  }
 }
 
 .letter-box.filled {

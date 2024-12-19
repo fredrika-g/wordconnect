@@ -512,7 +512,9 @@ const toggleModal = () => {
 
   if (isOpen) {
     modal.style.display = 'none';
+    modal.innerHTML = '';
   } else {
+    createModal();
     modal.style.display = 'flex';
   }
 };
@@ -536,7 +538,6 @@ const initGame = () => {
   generateBoard();
   generateLetterCircle();
   generateScoreBoard();
-  createModal();
 };
 
 // START PAGE

@@ -195,6 +195,7 @@ const generateLetterCircle = () => {
     height: '100%',
     transparent: true,
     parent: 'letterCircle',
+    resolution: 2,
     scene: {
       preload,
       create,
@@ -236,6 +237,7 @@ const generateLetterCircle = () => {
     const angleStep = (2 * Math.PI) / lettersSet.length;
 
     const bubbleGraphics = this.add.graphics(); // "letter bubbles" graphic object
+
     // line graphic object
     graphics = this.add.graphics({
       lineStyle: {
@@ -275,6 +277,7 @@ const generateLetterCircle = () => {
         color: SETTINGS.letterPicker.letterColor,
         fontStyle: 'bold',
         align: 'center',
+        resolution: 2,
       };
 
       const text = this.add.text(x, y, letter, textStyle).setOrigin(0.5);

@@ -136,6 +136,9 @@ body {
   background-color: #fff;
   color: #000;
 
+  box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2),
+    inset 0 -2px 4px hsla(0, 0%, 0%, 0.1);
+
   cursor: pointer;
 }
 
@@ -245,6 +248,9 @@ body {
   max-width: 300px;
   overflow: hidden;
   position: relative;
+
+  box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2),
+    inset 0 -2px 4px hsla(0, 0%, 0%, 0.1);
 }
 
 canvas,
@@ -414,6 +420,9 @@ canvas,
 
   font-size: 1.2rem;
   color: #000;
+
+  box-shadow: 0 2px 4px hsla(var(--clr-tertiary-900-hsl), 0.3),
+    inset 0 -1px 2px hsla(var(--clr-tertiary-900-hsl), 0.1);
 
   display: flex;
   align-items: center;

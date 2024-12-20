@@ -161,6 +161,8 @@ body {
   }
 
   @media (orientation: landscape) {
+    flex-direction: row;
+    justify-content: space-evenly;
     gap: 0;
 
     .groupedContent {
@@ -168,6 +170,18 @@ body {
       align-items: center;
       gap: 0;
       padding-inline: 1rem;
+    }
+
+    .statsWrapper {
+      display: flex;
+    }
+
+    #statsDisplay {
+      flex-direction: column;
+    }
+
+    .wave {
+      display: none;
     }
   }
   @media (width < 600px) {
@@ -239,23 +253,6 @@ canvas,
   background-size: contain;
   background-repeat: no-repeat;
   background-color: hsla(0, 0%, 100%, 0.5);
-}
-
-#loading {
-  border: 5px solid #f3f3f3; /* Light grey */
-  border-top: 5px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 #help {

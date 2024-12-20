@@ -218,14 +218,12 @@ const generateLetterCircle = () => {
 
   // phaser build
   function preload() {
-    this.load.image('dot', '../assets/dot.png'); // node placeholder
-
-    //  If local assets is not used: generate a node placeholder dynamically !!!
-
-    // debug loading error
-    this.load.on('loaderror', (file) => {
-      console.error(`Failed to load file: ${file.key}`, file.src);
-    });
+    // creating a graphic placeholder dynamically
+    const graphics = this.add.graphics();
+    graphics.fillStyle(0xffffff, 1); // color
+    graphics.fillRect(0, 0, 10, 10); // 10x10px
+    graphics.generateTexture('dot', 10, 10); // generate texture
+    graphics.destroy(); // remove the temporary object
   }
 
   // phaser build

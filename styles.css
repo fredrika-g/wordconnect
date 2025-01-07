@@ -1,10 +1,15 @@
 /* import font here */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
 
 :root {
   /* CUSTOMIZATION */
 
   /* app font */
-  font-family: system-ui;
+  --fontFamily: Arial;
+  /* heading font */
+  --headingFontFamily: Comfortaa, Arial;
+  /* heading font/thickness */
+  --headingFontWeight: 700;
 
   /* set the background image of the start page here. If no image is to be used, set value to an empty string ("") */
   --startPageBackgroundImagePath: url(https://images.unsplash.com/photo-1499195333224-3ce974eecb47?q=80&w=2851&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
@@ -40,6 +45,7 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: var(--fontFamily);
 }
 
 .container {
@@ -162,6 +168,12 @@ body {
     opacity: 0.3; /* Ändra opaciteten */
     z-index: -1; /* Lägger pseudoelementet bakom texten */
     background-image: var(--startPageBackgroundImagePath);
+  }
+
+  #title {
+    font-size: 2.5rem;
+    font-weight: var(--headingFontWeight);
+    font-family: var(--headingFontFamily);
   }
 }
 

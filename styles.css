@@ -1,7 +1,20 @@
 /* import font here */
 
 :root {
+  /* CUSTOMIZATION */
+
+  /* app font */
   font-family: system-ui;
+
+  /* set the background image of the start page here. If no image is to be used, set value to an empty string ("") */
+  --startPageBackgroundImagePath: url(https://images.unsplash.com/photo-1499195333224-3ce974eecb47?q=80&w=2851&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+
+  /* set the background image of the letter picker here. If no image is to be used, set value to an empty string ("") */
+  --letterPickerBackgroundImagePath: url(https://images.unsplash.com/photo-1565071559227-20ab25b7685e?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+
+  /* the primary color used: influences background colors and graphics of the letter picker */
+  --primary-color: #7ad0a0;
+  /* END OF CUSTOMIZATION */
 
   --font-size-sm: 1rem;
   --font-size-md: 1.5rem;
@@ -11,24 +24,11 @@
   --btn-padding-sm: 0.3em 0.6em;
   --btn-padding-md: 0.5em 1em;
 
-  --clr-primary-900-hsl: 0, 0%, 0%;
-  --clr-primary-800-hsl: 20, 0%, 20%;
-  --clr-primary-700-hsl: 5, 0%, 40%;
-  --clr-primary-100-hsl: 52, 100%, 95%;
-
-  --clr-secondary-900-hsl: 202, 50, 49;
-  --clr-secondary-800-hsl: 196, 52, 49;
-  --clr-secondary-700-hsl: 196, 80, 74;
-  --clr-secondary-600-hsl: 191, 57, 64;
-  --clr-secondary-500-hsl: 191, 71, 82;
-
   --clr-tertiary-900-hsl: 152, 63%, 28%;
   --clr-tertiary-800-hsl: 156, 74%, 34%;
   --clr-tertiary-700-hsl: 146, 47%, 64%;
   --clr-tertiary-600-hsl: 127, 33%, 82%;
   --clr-tertiary-500-hsl: 69, 39%, 93%;
-
-  --primary-color: #7ad0a0;
 }
 
 * {
@@ -145,9 +145,24 @@ body {
 /* START PAGE */
 
 #startPage {
+  position: relative;
   align-items: center;
   justify-content: center;
   gap: 2rem;
+
+  ::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover; /* Anpassar bakgrunden */
+    background-position: center;
+    opacity: 0.3; /* Ändra opaciteten */
+    z-index: -1; /* Lägger pseudoelementet bakom texten */
+    background-image: var(--startPageBackgroundImagePath);
+  }
 }
 
 @media (orientation: landscape) and (width < 800px) {
@@ -265,7 +280,7 @@ canvas,
   z-index: -1;
 
   border-radius: 100%;
-  background-image: url(https://images.unsplash.com/photo-1565071559227-20ab25b7685e?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-image: var(--letterPickerBackgroundImagePath);
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;

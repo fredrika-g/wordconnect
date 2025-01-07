@@ -1,5 +1,3 @@
-// import { WORDS } from './gameConstants.js';
-
 const startPage = document.querySelector('#startPage');
 const gamePage = document.querySelector('#game');
 const finishPage = document.querySelector('#finishPage');
@@ -74,11 +72,9 @@ const pointsPerKeyword = 5;
 const maxAmountOfWords = 5;
 
 // GRAPHICS SETTINGS
-// wave thickness (design element: the wavey line below scoreboard)
+// design element: the wavey line below scoreboard
 const waveThickness = 10;
 const waveColor = '#fff';
-
-const pickerTextColor = '#fff'; // the color of the letters in the letter picker
 
 const appStyles = window.getComputedStyle(document.querySelector(':root'));
 
@@ -92,22 +88,26 @@ const primaryColorConv = `0x${primaryColorHex.slice(
 
 // letter picker settings as object
 const letterPicker = {
-  primary: primaryColorConv,
-  lineWidth: 15,
+  primary: primaryColorConv, // the primary color of the picker, based on value provided in the CSS
+  lineWidth: 15, // width of the drawn line
   get lineColor() {
+    // color of the drawn line
     return modifyColor(this.primary);
   },
   get bubbleColor() {
+    // color of the "bubbles" containing the letters
     return modifyColor(this.primary);
   },
-  bubbleBorderWidth: 1,
+  bubbleBorderWidth: 1, // the border surrounding each "bubble"
   get bubbleBorderColor() {
+    // color of the border surrounding each "bubble"
     return modifyColor(this.bubbleColor);
   },
-  letterColor: pickerTextColor,
-  fontFamily: 'Arial',
+  letterColor: '#fff', // color of the letters
+  fontFamily: 'Arial', // font
 };
 
+// helper function for creating new color based on given hex color; factor = dark to light. The lower the factor the darker the color
 function modifyColor(hexColor, factor = 0.8) {
   // extracting the rgb values
   let r = (hexColor >> 16) & 0xff;
@@ -167,10 +167,8 @@ const generateWords = () => {
   if (currentWords.length > maxAmountOfWords) {
     let shuffledWords = shuffleList(currentWords, true);
     currentWords = [currentWords[0], ...limitWords(shuffledWords)];
-    console.log(currentWords);
   }
 
-  console.log(currentWords);
   // game settings for this round
   setScoreValues();
 };
@@ -425,7 +423,6 @@ const generateLetterCircle = () => {
     if (validateWord(words, word)) {
       // checking if word has already been entered
       if (foundWords.find((w) => w === word)) {
-        console.log(`Word ${word} already entered`);
         // do nothing if word has already been entered, exit out
         return null;
       }

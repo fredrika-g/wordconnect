@@ -1,12 +1,33 @@
-import { WORDS } from './gameConstants.js';
-
-import { SETTINGS } from './settings.js';
+// import { WORDS } from './gameConstants.js';
 
 const startPage = document.querySelector('#startPage');
 const gamePage = document.querySelector('#game');
 const finishPage = document.querySelector('#finishPage');
 
 // CUSTOMIZABLE SETTINGS HERE
+
+// PROVIDED KEYWORDS HERE: FOLLOW GIVEN FORMAT
+
+const WORDS = {
+  snabb: ['ban', 'bas', 'sa', 'sabb', 'as'],
+  enkel: ['en', 'len', 'elen', 'klen', 'kel', 'ek', 'lek', 'leken', 'el'],
+  trygg: ['try', 'gry', 'gryt', 'rygg', 'ryt'],
+  grön: ['örn', 'rön', 'gör', 'ön'],
+  smart: ['mars', 'arm', 'mast', 'stram', 'ram', 'rast', 'tam', 'tar', 'trams'],
+};
+
+// WORDS variable needs to follow this format (an object):
+/**
+ {
+  snabb: ['ban', 'bas', 'sa'],
+  enkel: ['en', 'len', 'elen', 'klen'],
+  trygg: ['try', 'gry', 'gryt'],
+  grön: ['örn', 'rön'],
+  smart: ['mars', 'arm', 'mast', 'stram', 'ram', 'rast'],
+}
+ */
+
+// GAME SETTINGS
 
 // the title/name of the game
 const appTitle = 'Word Connect';
@@ -37,9 +58,70 @@ const pointsText = 'poäng';
 // "attempts" text
 const attemptsText = 'försök';
 
-// wave thickness
+// Set if attempts should be enabled below: true = yes, false = no
+const attemptsEnabled = true;
+
+// Set if hints should be enabled below: true = yes, false = no
+const hintsEnabled = true;
+
+// Set points value per regular word below
+const pointsPerRegWord = 1;
+
+// Set points value per keyword below
+const pointsPerKeyword = 5;
+
+// Set max amount of words on board below, recommended max = 5
+const maxAmountOfWords = 5;
+
+// GRAPHICS SETTINGS
+// wave thickness (design element: the wavey line below scoreboard)
 const waveThickness = 10;
 const waveColor = '#fff';
+
+const pickerTextColor = '#fff'; // the color of the letters in the letter picker
+
+const appStyles = window.getComputedStyle(document.querySelector(':root'));
+
+// retrieving value from styles.css to set color of letter picker
+const primaryColorHex = appStyles.getPropertyValue('--primary-color');
+// converting from hex to numerical, as accepted by phaser
+const primaryColorConv = `0x${primaryColorHex.slice(
+  1,
+  primaryColorHex.length
+)}`;
+
+// letter picker settings as object
+const letterPicker = {
+  primary: primaryColorConv,
+  lineWidth: 15,
+  get lineColor() {
+    return modifyColor(this.primary);
+  },
+  get bubbleColor() {
+    return modifyColor(this.primary);
+  },
+  bubbleBorderWidth: 1,
+  get bubbleBorderColor() {
+    return modifyColor(this.bubbleColor);
+  },
+  letterColor: pickerTextColor,
+  fontFamily: 'Arial',
+};
+
+function modifyColor(hexColor, factor = 0.8) {
+  // extracting the rgb values
+  let r = (hexColor >> 16) & 0xff;
+  let g = (hexColor >> 8) & 0xff;
+  let b = hexColor & 0xff;
+
+  // modify the color values (darker/lighter depending on the factor: lower factor: darker color)
+  r = Math.min(255, Math.max(0, Math.round(r * factor)));
+  g = Math.min(255, Math.max(0, Math.round(g * factor)));
+  b = Math.min(255, Math.max(0, Math.round(b * factor)));
+
+  // return the modified color values as rgb
+  return (r << 16) | (g << 8) | b;
+}
 
 // END OF CUSTOMIZABLE SETTINGS
 
@@ -82,7 +164,7 @@ const generateWords = () => {
   });
 
   // limit amount of words
-  if (currentWords.length > SETTINGS.maxAmountOfWords) {
+  if (currentWords.length > maxAmountOfWords) {
     let shuffledWords = shuffleList(currentWords, true);
     currentWords = [currentWords[0], ...limitWords(shuffledWords)];
     console.log(currentWords);
@@ -110,7 +192,7 @@ const generateBoard = () => {
   statsDisplay.id = 'statsDisplay';
 
   //   if attempts enabled, insert attempts
-  if (SETTINGS.attemptsEnabled) {
+  if (attemptsEnabled) {
     const attemptsSpan = document.createElement('span');
     attemptsSpan.classList.add('attempts');
     statsDisplay.append(attemptsSpan);
@@ -151,7 +233,7 @@ const generateBoard = () => {
       const box = document.createElement('div');
       box.className = 'letter-box';
 
-      if (SETTINGS.hintsEnabled) {
+      if (hintsEnabled) {
         // if index of letter matches index of the hint, set is a clue
         if (j === hintIndex) {
           box.textContent = word[j];
@@ -241,8 +323,8 @@ const generateLetterCircle = () => {
     // line graphic object
     graphics = this.add.graphics({
       lineStyle: {
-        width: SETTINGS.letterPicker.lineWidth,
-        color: SETTINGS.letterPicker.lineColor,
+        width: letterPicker.lineWidth,
+        color: letterPicker.lineColor,
       },
     });
 
@@ -262,19 +344,19 @@ const generateLetterCircle = () => {
       const y = centerY + radius * Math.sin(angle);
 
       bubbleGraphics.lineStyle(
-        SETTINGS.letterPicker.bubbleBorderWidth,
-        SETTINGS.letterPicker.bubbleBorderColor
+        letterPicker.bubbleBorderWidth,
+        letterPicker.bubbleBorderColor
       ); // border width, color
       bubbleGraphics.strokeCircle(x, y, bubbleSize / 2); // draw the border
 
       // create the circle shaped background for the letter
-      bubbleGraphics.fillStyle(SETTINGS.letterPicker.bubbleColor, 1); // background color
+      bubbleGraphics.fillStyle(letterPicker.bubbleColor, 1); // background color
       bubbleGraphics.fillCircle(x, y, bubbleSize / 2); // set circle size
 
       const textStyle = {
-        fontFamily: SETTINGS.letterPicker.fontFamily,
+        fontFamily: letterPicker.fontFamily,
         fontSize: `${bubbleSize / 2}px`, //adjusting the font size dynamically
-        color: SETTINGS.letterPicker.letterColor,
+        color: letterPicker.letterColor,
         fontStyle: 'bold',
         align: 'center',
         resolution: 2,
@@ -335,7 +417,7 @@ const generateLetterCircle = () => {
 
   const validateMove = (word) => {
     // check if attempts are enabled, if true increase attempts used
-    if (SETTINGS.attemptsEnabled) {
+    if (attemptsEnabled) {
       usedAttempts++;
     }
 
@@ -353,17 +435,14 @@ const generateLetterCircle = () => {
 
       // add points based on type of word
       isKeyword(word)
-        ? (score += SETTINGS.pointsPerKeyword)
-        : (score += SETTINGS.pointsPerRegWord);
+        ? (score += pointsPerKeyword)
+        : (score += pointsPerRegWord);
 
       // update the scoreboard
       generateScoreBoard();
 
       // draw the line
-      graphics.lineStyle(
-        SETTINGS.letterPicker.lineWidth,
-        SETTINGS.letterPicker.lineColor
-      );
+      graphics.lineStyle(letterPicker.lineWidth, letterPicker.lineColor);
       drawContinuousLine();
 
       // place letters on board
@@ -372,10 +451,7 @@ const generateLetterCircle = () => {
       // if word is not a valid word
       generateScoreBoard();
 
-      graphics.lineStyle(
-        SETTINGS.letterPicker.lineWidth,
-        SETTINGS.letterPicker.lineColor
-      );
+      graphics.lineStyle(letterPicker.lineWidth, letterPicker.lineColor);
       drawContinuousLine();
 
       // check if win or lose
@@ -395,11 +471,7 @@ const generateLetterCircle = () => {
 
 // check if win or loss
 const checkGameStatus = () => {
-  if (
-    SETTINGS.attemptsEnabled &&
-    usedAttempts === maxAttempts &&
-    score < maxPoints
-  ) {
+  if (attemptsEnabled && usedAttempts === maxAttempts && score < maxPoints) {
     isWin = false;
     displayFinish();
   }
@@ -467,7 +539,7 @@ const setScoreValues = () => {
   // setting maxpoints to the length of the list of possible words, minus the keyword which is worth more
   maxPoints = currentWords.length - 1;
   // adding the point value of the keyword
-  maxPoints += SETTINGS.pointsPerKeyword;
+  maxPoints += pointsPerKeyword;
 
   maxAttempts = currentWords.length + 3;
 };
@@ -625,7 +697,7 @@ const displayFinish = () => {
 
   summary.append(pointsStat);
 
-  if (SETTINGS.attemptsEnabled) {
+  if (attemptsEnabled) {
     const attemptsStat = document.createElement('div');
     attemptsStat.classList.add('statRow');
     attemptsStat.innerHTML = `<span class="currentStat">${usedAttempts}</span> ${outOf} ${maxAttempts} <span>${attemptsText}</span>`;

@@ -211,6 +211,7 @@ const generateBoard = () => {
   const helpBtn = document.createElement('div');
   helpBtn.id = 'help';
   helpBtn.addEventListener('click', toggleModal);
+  statsWrapper.append(helpBtn);
 
   //   BOARD
   const wordBoard = document.createElement('div');
@@ -262,7 +263,7 @@ const generateBoard = () => {
   groupedContent.append(wordBoard, letterCircle);
 
   //   appending content
-  gamePage.append(statsWrapper, helpBtn, groupedContent);
+  gamePage.append(statsWrapper, groupedContent);
 };
 
 // generate letter picker
@@ -494,7 +495,7 @@ const isKeyword = (word) => {
 
 // limit amount of words per round
 const limitWords = (wordsList) => {
-  return wordsList.splice(0, 3);
+  return wordsList.splice(0, maxAmountOfWords - 1);
 };
 
 // helper: shuffle an array

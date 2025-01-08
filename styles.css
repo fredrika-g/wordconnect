@@ -77,13 +77,6 @@ body {
 }
 
 @media (max-width: 600px) {
-  .container {
-    padding: calc(env(safe-area-inset-top) + 1rem)
-      calc(env(safe-area-inset-right) + 0.5rem)
-      calc(env(safe-area-inset-bottom) + 1rem)
-      calc(env(safe-area-inset-left) + 0.5rem);
-  }
-
   .container > .active h1 {
     font-size: var(--font-size-md);
   }
@@ -100,7 +93,7 @@ body {
 }
 
 /* full width when in landscape mode on smaller screens */
-@media (orientation: landscape) and (width < 1024px) {
+@media (orientation: landscape) and (max-width: 1024px) {
   .container {
     max-width: 100%;
   }
@@ -111,7 +104,7 @@ body {
 }
 
 /* return to standard max width when on bigger screens even in landscape */
-@media (orientation: landscape) and (width > 1025px) {
+@media (orientation: landscape) and (min-width: 1025px) {
   .container {
     max-width: 500px;
   }
@@ -132,7 +125,7 @@ body {
   }
 }
 
-@media (width > 400px) {
+@media (min-width: 400px) {
   .container > .active p {
     text-align: start;
   }
@@ -185,7 +178,7 @@ body {
   }
 }
 
-@media (orientation: landscape) and (width < 800px) {
+@media (orientation: landscape) and (max-width: 800px) {
   #startPage {
     gap: 0;
   }
@@ -207,6 +200,7 @@ body {
 
   @media (orientation: landscape) {
     gap: 0;
+    padding: 0.5rem;
 
     .groupedContent {
       flex-direction: row;
@@ -216,7 +210,7 @@ body {
     }
   }
 
-  @media (orientation: landscape) and (width < 768px) {
+  @media (orientation: landscape) and (max-width: 768px) {
     flex-direction: row;
     justify-content: space-evenly;
 
@@ -233,7 +227,7 @@ body {
     }
   }
 
-  @media (width < 600px) {
+  @media (max-width: 600px) {
     #statsDisplay {
       padding-bottom: 1.5rem;
     }
@@ -246,7 +240,7 @@ body {
     }
   }
 
-  @media (width < 400px) {
+  @media (max-width: 400px) {
     #statsDisplay {
       .attempts,
       .score {
@@ -260,7 +254,7 @@ body {
     }
   }
 
-  @media (width < 321px) {
+  @media (max-width: 321px) {
     #statsDisplay {
       padding-bottom: 0;
     }
@@ -274,8 +268,8 @@ body {
     }
   }
 
-  @media (width > 600px) {
-    gap: 2rem;
+  @media (min-width: 600px) {
+    gap: 4rem;
 
     #letterCircle {
       margin-top: 2rem;
@@ -325,7 +319,7 @@ canvas,
   z-index: 2;
   position: absolute;
   right: 0;
-  top: 0;
+  top: -2px;
   width: 2rem;
   aspect-ratio: 1;
   border-radius: 100%;
@@ -387,9 +381,9 @@ canvas,
   content: '\2717';
 }
 
-@media (width < 768px) {
+@media (max-width: 768px) {
   .modal-content {
-    width: 80%;
+    width: 85%;
     max-height: 90%;
     padding: 15px;
 
@@ -459,7 +453,7 @@ canvas,
   display: flex;
   gap: 5px;
 }
-@media (width < 321px) {
+@media (max-width: 321px) {
   #wordBoard,
   .letter-row {
     gap: 1px;
@@ -486,7 +480,7 @@ canvas,
   transition: background-color 0.3s ease;
 }
 
-@media (width < 400px) {
+@media (max-width: 400px) {
   .letter-box {
     width: 1.5rem;
     font-size: 1.1rem;
@@ -541,7 +535,7 @@ canvas,
     }
   }
 
-  @media (orientation: landscape) and (width < 800px) {
+  @media (orientation: landscape) and (max-width: 800px) {
     .wrapper {
       gap: 0.5rem;
     }

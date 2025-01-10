@@ -245,12 +245,16 @@ body {
       .attempts,
       .score {
         flex-direction: row;
-        /* padding-top: 2rem; */
       }
       margin-top: 0;
+      padding-top: 1rem;
     }
     .wave {
       height: 1rem;
+    }
+
+    #help {
+      top: 10px;
     }
   }
 

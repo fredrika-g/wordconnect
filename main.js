@@ -2,6 +2,8 @@ const startPage = document.querySelector('#startPage');
 const gamePage = document.querySelector('#game');
 const finishPage = document.querySelector('#finishPage');
 
+/* -------------------------------------------- */
+
 // CUSTOMIZABLE SETTINGS HERE
 
 // PROVIDED KEYWORDS HERE: FOLLOW GIVEN FORMAT

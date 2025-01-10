@@ -181,6 +181,8 @@ body {
 @media (orientation: landscape) and (max-width: 800px) {
   #startPage {
     gap: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 }
 
@@ -261,6 +263,7 @@ body {
   @media (max-width: 321px) {
     #statsDisplay {
       padding-bottom: 0;
+      padding-top: 2rem;
     }
 
     .wave {
@@ -457,7 +460,7 @@ canvas,
   display: flex;
   gap: 5px;
 }
-@media (max-width: 321px) {
+@media (max-width: 350px) {
   #wordBoard,
   .letter-row {
     gap: 1px;

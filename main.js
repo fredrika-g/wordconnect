@@ -274,9 +274,12 @@ const generateBoard = () => {
 
 // generate letter picker
 const generateLetterCircle = () => {
+  console.log(phaserGame);
   if (phaserGame) {
     phaserGame.destroy(true);
+    phaserGame = null;
   }
+
   // build the letter picker
 
   const config = {
@@ -477,6 +480,13 @@ const generateLetterCircle = () => {
   // phaser build
   function update() {}
 };
+
+window.addEventListener('resize', () => {
+  if (phaserGame) {
+    phaserGame.scale.resize(window.innerWidth, window.innerHeight);
+    generateLetterCircle(); // reset circle
+  }
+});
 
 // check if win or loss
 const checkGameStatus = () => {

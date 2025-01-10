@@ -274,7 +274,6 @@ const generateBoard = () => {
 
 // generate letter picker
 const generateLetterCircle = () => {
-  console.log(phaserGame);
   if (phaserGame) {
     phaserGame.destroy(true);
     phaserGame = null;
@@ -312,6 +311,7 @@ const generateLetterCircle = () => {
 
   // phaser build
   function preload() {
+    resizeCanvas();
     // creating a graphic placeholder dynamically
     const graphics = this.add.graphics();
     graphics.fillStyle(0xffffff, 1); // color
@@ -481,12 +481,21 @@ const generateLetterCircle = () => {
   function update() {}
 };
 
-window.addEventListener('resize', () => {
+// window.addEventListener('resize', () => {
+//   phaserGame.scale.resize(window.innerWidth, window.innerHeight);
+//   generateLetterCircle(); // reset circle
+// });
+
+const resizeCanvas = () => {
+  const letterCircle = document.getElementById('letterCircle');
+  const width = letterCircle.offsetWidth;
+  const height = letterCircle.offsetHeight;
+
   if (phaserGame) {
-    phaserGame.scale.resize(window.innerWidth, window.innerHeight);
-    generateLetterCircle(); // reset circle
+    phaserGame.scale.resize(width, height); // Dynamiskt ändra storlek
   }
-});
+};
+window.addEventListener('resize', resizeCanvas);
 
 // check if win or loss
 const checkGameStatus = () => {

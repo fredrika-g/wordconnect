@@ -130,6 +130,7 @@ function modifyColor(hexColor, factor = 0.8) {
 /* -------------------------------------------- */
 
 // game variables/data storage !!! DONT CHANGE
+let phaserGame;
 let currentWords = [];
 let foundWords = [];
 let score = 0;
@@ -150,6 +151,9 @@ const generateWords = () => {
 
   maxAttempts = 0;
   usedAttempts = 0;
+
+  foundWords = [];
+  currentWords = [];
 
   // get the keys (i.e the keywords)
   let keywords = Object.keys(WORDS);
@@ -270,6 +274,9 @@ const generateBoard = () => {
 
 // generate letter picker
 const generateLetterCircle = () => {
+  if (phaserGame) {
+    phaserGame.destroy(true);
+  }
   // build the letter picker
 
   const config = {
@@ -286,7 +293,7 @@ const generateLetterCircle = () => {
     },
   };
 
-  const game = new Phaser.Game(config);
+  phaserGame = new Phaser.Game(config);
 
   // saving each letter traced
   let letters = [];
@@ -369,6 +376,8 @@ const generateLetterCircle = () => {
     });
 
     // event listeners
+    this.input.removeAllListeners();
+
     this.input.on('pointerdown', startPath, this);
     this.input.on('pointermove', drawPath, this);
     this.input.on('pointerup', endPath, this);

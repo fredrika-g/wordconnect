@@ -71,7 +71,7 @@ const pointsPerRegWord = 1;
 const pointsPerKeyword = 5;
 
 // Set max amount of words on board below, recommended max = 5
-const maxAmountOfWords = 4;
+const maxAmountOfWords = 5;
 
 // GRAPHICS SETTINGS
 // design element: the wavey line below scoreboard
@@ -517,8 +517,6 @@ const shuffleList = (arr, removeFirst = false) => {
 const generateScoreBoard = () => {
   // render stats
 
-  console.log(currentWords.length + 5, 'maxPoints', maxPoints);
-
   if (attemptsEnabled) {
     document.getElementById('currentAttemptsSpan').innerText = usedAttempts;
     document.getElementById('maxAttemptsSpan').innerText = maxAttempts;
@@ -620,16 +618,13 @@ const displayFinish = () => {
 
   const pointsSpan = document.getElementById('endingPointsSpan');
   pointsSpan.innerText = score;
-  console.log('Score', score);
-  const maxPointsSpan = document.getElementById('maxPointsSpan');
-  maxPointsSpan.innerText = maxPoints;
-  console.log('maxPointsSpan', maxPointsSpan);
 
   if (attemptsEnabled) {
+    const attemptsDiv = document.querySelector('.attemptsResult');
+    attemptsDiv.style.display = 'block';
     const attemptsSpan = document.getElementById('endingAttemptsSpan');
+
     attemptsSpan.innerText = usedAttempts;
-    const maxAttemptsSpan = document.getElementById('maxAttemptsSpan');
-    maxAttemptsSpan.innerText = maxAttempts;
   }
 };
 

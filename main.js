@@ -77,6 +77,7 @@ const maxAmountOfWords = 5;
 // design element: the wavey line below scoreboard
 const waveThickness = 10;
 const waveColor = '#fff';
+const wave = document.getElementById('wave');
 
 const appStyles = window.getComputedStyle(document.querySelector(':root'));
 
@@ -140,7 +141,7 @@ let isWin = false;
 // global variables !!! DONT CHANGE
 let maxPoints;
 let maxAttempts;
-let modal = document.createElement('div');
+let modal = document.getElementById('modal');
 
 // GAME LOGIC
 
@@ -181,47 +182,27 @@ const generateWords = () => {
 
 // generate board
 const generateBoard = () => {
+  const wavePath = wave.querySelector('path');
+  wavePath.setAttribute('stroke', waveColor);
+  wavePath.setAttribute('stroke-width', waveThickness);
   // build the game board
 
-  // clearing html
-  gamePage.innerHTML = '';
-
-  //   creating content
-
   //   STATS
-  const statsWrapper = document.createElement('div');
-  statsWrapper.classList.add('statsWrapper');
-
-  const statsDisplay = document.createElement('div');
-  statsDisplay.id = 'statsDisplay';
 
   //   if attempts enabled, insert attempts
-  if (attemptsEnabled) {
-    const attemptsSpan = document.createElement('span');
-    attemptsSpan.classList.add('attempts');
-    statsDisplay.append(attemptsSpan);
+  const attemptsSpan = document.getElementById('attemptsSpan');
+  if (!attemptsEnabled) {
+    attemptsSpan.classList.add('notVisible');
   }
 
-  const scoreSpan = document.createElement('span');
-  scoreSpan.classList.add('score');
-  statsDisplay.append(scoreSpan);
-
-  statsWrapper.append(statsDisplay);
-
-  // adding wavey line as decoration
-  statsWrapper.innerHTML += `<svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
-    <path fill="none" stroke=${waveColor} stroke-width="${waveThickness}" d="M0,50 C100,90 200,10 300,50 C400,90 500,10 600,50 C700,90 800,10 900,50 C1000,90 1100,10 1200,50 C1300,90 1400,10 1440,50"></path>
-  </svg>`;
-
-  //   HELP BUTTON
   const helpBtn = document.createElement('div');
   helpBtn.id = 'help';
   helpBtn.addEventListener('click', toggleModal);
-  statsWrapper.append(helpBtn);
+
+  document.getElementById('statsDisplay').append(helpBtn);
 
   //   BOARD
-  const wordBoard = document.createElement('div');
-  wordBoard.id = 'wordBoard';
+  const wordBoard = document.getElementById('wordBoard');
 
   currentWords.forEach((word, i) => {
     // create a row for each word
@@ -254,22 +235,12 @@ const generateBoard = () => {
   });
 
   //   LETTER CIRCLE
-  const letterCircle = document.createElement('div');
-  letterCircle.id = 'letterCircle';
+  const letterCircle = document.getElementById('letterCircle');
 
   const imageDiv = document.createElement('div');
   imageDiv.id = 'imageArea';
 
   letterCircle.append(imageDiv);
-
-  // grouping content for responsive design
-  const groupedContent = document.createElement('div');
-  groupedContent.classList.add('groupedContent');
-
-  groupedContent.append(wordBoard, letterCircle);
-
-  //   appending content
-  gamePage.append(statsWrapper, groupedContent);
 };
 
 // generate letter picker
@@ -481,11 +452,6 @@ const generateLetterCircle = () => {
   function update() {}
 };
 
-// window.addEventListener('resize', () => {
-//   phaserGame.scale.resize(window.innerWidth, window.innerHeight);
-//   generateLetterCircle(); // reset circle
-// });
-
 const resizeCanvas = () => {
   const letterCircle = document.getElementById('letterCircle');
   const width = letterCircle.offsetWidth;
@@ -602,55 +568,23 @@ const placeLetters = (word) => {
   }
 };
 
-const createModal = () => {
-  modal.classList.add('modal-overlay');
-  modal.id = 'modal';
-
-  // Dölj modalen vid klick utanför innehållet
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) {
-      toggleModal();
-    }
-  });
-
-  const modalContent = document.createElement('div');
-  modalContent.classList.add('modal-content');
-
-  const heading = document.createElement('h2');
-  heading.innerText = helpHeadingText;
-  const text = document.createElement('p');
-  text.classList.add('instructions');
-  text.innerText = instructions;
-
-  const closeBtn = document.createElement('div');
-  closeBtn.classList.add('close-modal-btn');
-  closeBtn.addEventListener('click', toggleModal);
-
-  modalContent.append(heading, text, closeBtn);
-
-  modal.append(modalContent);
-
-  gamePage.append(modal);
-};
-
 const toggleModal = () => {
   const isOpen = modal.style.display === 'flex';
 
   if (isOpen) {
     modal.style.display = 'none';
-    modal.innerHTML = '';
   } else {
-    createModal();
     modal.style.display = 'flex';
   }
 };
 
 // game init
 const initGame = () => {
+  document.getElementById('wordBoard').innerHTML = '';
+  document.getElementById('letterCircle').innerHTML = '';
+
   // generate words
   generateWords();
-
-  // start game: render game page and contents
 
   // set active page
   removeActive();
@@ -664,10 +598,6 @@ const initGame = () => {
 
 // START PAGE
 const displayStart = () => {
-  // clear html
-  gamePage.innerHTML = '';
-  finishPage.innerHTML = '';
-
   // set active page
   removeActive();
   startPage.classList.add('active');
@@ -676,48 +606,20 @@ const displayStart = () => {
 // FINISH PAGE
 
 const displayFinish = () => {
-  // clear html
-  startPage.innerHTML = '';
-  gamePage.innerHTML = '';
   // set active page
   removeActive();
   finishPage.classList.add('active');
 
-  // creating content
-  const wrapper = document.createElement('div');
-  wrapper.classList.add('wrapper');
-
-  const heading = document.createElement('h1');
+  const heading = finishPage.querySelector('h1');
   heading.innerText = isWin ? winMsg : loseMsg;
 
-  // game stats summary
-  const summary = document.createElement('div');
-  summary.classList.add('summary');
-
-  const pointsStat = document.createElement('div');
-  pointsStat.classList.add('statRow');
-
-  pointsStat.innerHTML = `<span class="currentStat">${score}</span> ${outOf} ${maxPoints} <span>${pointsText}</span>`;
-
-  summary.append(pointsStat);
+  const pointsSpan = document.getElementById('endingPointsSpan');
+  pointsSpan.innerText = score;
 
   if (attemptsEnabled) {
-    const attemptsStat = document.createElement('div');
-    attemptsStat.classList.add('statRow');
-    attemptsStat.innerHTML = `<span class="currentStat">${usedAttempts}</span> ${outOf} ${maxAttempts} <span>${attemptsText}</span>`;
-    summary.append(attemptsStat);
+    const attemptsSpan = document.getElementById('endingAttemptsSpan');
+    attemptsSpan.innerText = usedAttempts;
   }
-
-  // reset btn/play again
-  const resetBtn = document.createElement('button');
-  resetBtn.classList.add('btn');
-  resetBtn.id = 'resetBtn';
-  resetBtn.innerText = resetBtnText;
-  resetBtn.addEventListener('click', initGame);
-
-  // appending content
-  wrapper.append(heading, summary, resetBtn);
-  finishPage.append(wrapper);
 };
 
 // function that removes .active class on all relevant elements
@@ -728,7 +630,23 @@ const removeActive = () => {
 };
 
 const addingEventListeners = () => {
+  // start game btn
   document.getElementById('startBtn').addEventListener('click', initGame);
+
+  // hiding modal if click outside content
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      toggleModal();
+    }
+  });
+
+  // close modal btn
+  document
+    .getElementById('closeModalBtn')
+    .addEventListener('click', toggleModal);
+
+  // reset game btn
+  document.getElementById('resetBtn').addEventListener('click', initGame);
 };
 
 // APPLICATION ENTRY POINT

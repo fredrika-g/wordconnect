@@ -9,7 +9,6 @@
   </head>
   <body>
     <div class="container">
-      <!-- <div id="startPage"></div> -->
       <div id="startPage">
         <h1 id="title">Word Connect</h1>
         <p class="instructions">
@@ -20,8 +19,74 @@
         </p>
         <button id="startBtn" class="btn">Starta</button>
       </div>
-      <div id="game"></div>
-      <div id="finishPage"></div>
+
+      <div id="game">
+        <div class="statsWrapper">
+          <div id="statsDisplay">
+            <svg
+              class="wave"
+              id="wave"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1440 100"
+              preserveAspectRatio="none"
+            >
+              <path
+                fill="none"
+                stroke="#000"
+                stroke-width=""
+                d="M0,50 C100,90 200,10 300,50 C400,90 500,10 600,50 C700,90 800,10 900,50 C1000,90 1100,10 1200,50 C1300,90 1400,10 1440,50"
+              ></path>
+            </svg>
+            <span class="attempts" id="attemptsSpan">
+              <span>försök</span>
+              <div>
+                <span id="currentAttemptsSpan"></span> /
+                <span id="maxAttemptsSpan"></span>
+              </div>
+            </span>
+            <span class="score">
+              <span>poäng</span>
+              <div>
+                <span id="currentPointsSpan"></span> /
+                <span id="maxPointsSpan"></span>
+              </div>
+            </span>
+          </div>
+        </div>
+        <div class="groupedContent">
+          <div id="wordBoard"></div>
+          <div id="letterCircle"></div>
+        </div>
+
+        <div id="modal" class="modal-overlay">
+          <div class="modal-content">
+            <h2>Så här spelar du</h2>
+            <p class="instructions">
+              Fyll i de tomma rutorna på brädet genom att dra en linje mellan
+              bokstäverna i cirkeln så att ord formas! <br />Du har ett
+              begränsat antal försök på dig att hitta alla ord, och din utmaning
+              är att bli klar innan dina försök tar slut.
+            </p>
+            <div class="close-modal-btn" id="closeModalBtn"></div>
+          </div>
+        </div>
+      </div>
+      <div id="finishPage" class="active">
+        <div class="wrapper">
+          <h1>Nästan! Försök igen</h1>
+          <div class="summary">
+            <div class="statRow">
+              <span class="currentStat" id="endingPointsSpan"></span> av 9
+              <span>poäng</span>
+            </div>
+            <div class="statRow">
+              <span class="currentStat" id="endingAttemptsSpan"></span> av 8
+              <span>försök</span>
+            </div>
+          </div>
+          <button class="btn" id="resetBtn">Spela igen</button>
+        </div>
+      </div>
     </div>
 
     <!-- scripts -->

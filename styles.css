@@ -42,6 +42,10 @@
   --btn-padding-md: 0.5em 1em;
 }
 
+.notVisible {
+  display: none;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

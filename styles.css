@@ -46,6 +46,10 @@
   display: none;
 }
 
+.visible {
+  display: block;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

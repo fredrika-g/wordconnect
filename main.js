@@ -71,7 +71,7 @@ const pointsPerRegWord = 1;
 const pointsPerKeyword = 5;
 
 // Set max amount of words on board below, recommended max = 5
-const maxAmountOfWords = 5;
+const maxAmountOfWords = 4;
 
 // GRAPHICS SETTINGS
 // design element: the wavey line below scoreboard
@@ -515,17 +515,17 @@ const shuffleList = (arr, removeFirst = false) => {
 
 // update the scoreboard
 const generateScoreBoard = () => {
-  // display stats
+  // render stats
 
-  if (gamePage.querySelector('.attempts')) {
-    gamePage.querySelector(
-      '.attempts'
-    ).innerHTML = `<span>${attemptsText}</span> <div><span>${usedAttempts}</span> / <span>${maxAttempts}</span></div>`;
+  console.log(currentWords.length + 5, 'maxPoints', maxPoints);
+
+  if (attemptsEnabled) {
+    document.getElementById('currentAttemptsSpan').innerText = usedAttempts;
+    document.getElementById('maxAttemptsSpan').innerText = maxAttempts;
   }
 
-  gamePage.querySelector(
-    '.score'
-  ).innerHTML = `<span>${pointsText}</span> <div><span>${score}</span> / <span>${maxPoints}</span></div>`;
+  document.getElementById('currentPointsSpan').innerText = score;
+  document.getElementById('maxPointsSpan').innerText = maxPoints;
 };
 
 // calculate the max points and max attempts based on amount of words
@@ -610,15 +610,26 @@ const displayFinish = () => {
   removeActive();
   finishPage.classList.add('active');
 
-  const heading = finishPage.querySelector('h1');
-  heading.innerText = isWin ? winMsg : loseMsg;
+  if (isWin) {
+    document.getElementById('lossHeading').style.display = 'none';
+    document.getElementById('winHeading').style.display = 'block';
+  } else {
+    document.getElementById('winHeading').style.display = 'none';
+    document.getElementById('lossHeading').style.display = 'block';
+  }
 
   const pointsSpan = document.getElementById('endingPointsSpan');
   pointsSpan.innerText = score;
+  console.log('Score', score);
+  const maxPointsSpan = document.getElementById('maxPointsSpan');
+  maxPointsSpan.innerText = maxPoints;
+  console.log('maxPointsSpan', maxPointsSpan);
 
   if (attemptsEnabled) {
     const attemptsSpan = document.getElementById('endingAttemptsSpan');
     attemptsSpan.innerText = usedAttempts;
+    const maxAttemptsSpan = document.getElementById('maxAttemptsSpan');
+    maxAttemptsSpan.innerText = maxAttempts;
   }
 };
 
@@ -646,7 +657,10 @@ const addingEventListeners = () => {
     .addEventListener('click', toggleModal);
 
   // reset game btn
-  document.getElementById('resetBtn').addEventListener('click', initGame);
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    document.getElementById('help').remove();
+    initGame();
+  });
 };
 
 // APPLICATION ENTRY POINT

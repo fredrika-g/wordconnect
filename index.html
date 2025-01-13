@@ -10,13 +10,18 @@
   <body>
     <div class="container">
       <div id="startPage">
+        <!-- TITLE OF GAME -->
         <h1 id="title">Word Connect</h1>
+
+        <!-- INSTRUCTIONS -->
         <p class="instructions">
           Fyll i de tomma rutorna på brädet genom att dra en linje mellan
           bokstäverna i cirkeln så att ord formas! <br />Du har ett begränsat
           antal försök på dig att hitta alla ord, och din utmaning är att bli
           klar innan dina försök tar slut.
         </p>
+
+        <!-- START BUTTON -->
         <button id="startBtn" class="btn">Starta</button>
       </div>
 
@@ -37,6 +42,8 @@
                 d="M0,50 C100,90 200,10 300,50 C400,90 500,10 600,50 C700,90 800,10 900,50 C1000,90 1100,10 1200,50 C1300,90 1400,10 1440,50"
               ></path>
             </svg>
+
+            <!-- ATTEMPTS -->
             <span class="attempts" id="attemptsSpan">
               <span>försök</span>
               <div>
@@ -44,6 +51,8 @@
                 <span id="maxAttemptsSpan"></span>
               </div>
             </span>
+
+            <!-- POINTS -->
             <span class="score">
               <span>poäng</span>
               <div>
@@ -58,9 +67,12 @@
           <div id="letterCircle"></div>
         </div>
 
+        <!-- HELP MODAL -->
         <div id="modal" class="modal-overlay">
           <div class="modal-content">
+            <!-- MODAL HEADING -->
             <h2>Så här spelar du</h2>
+            <!-- MODAL INSTRUCTIONS -->
             <p class="instructions">
               Fyll i de tomma rutorna på brädet genom att dra en linje mellan
               bokstäverna i cirkeln så att ord formas! <br />Du har ett
@@ -73,17 +85,27 @@
       </div>
       <div id="finishPage" class="active">
         <div class="wrapper">
-          <h1>Nästan! Försök igen</h1>
+          <!-- RESULT HEADINGS: WIN OR LOSE SCENARIO -->
+          <h1>
+            <span id="lossHeading">Nästan! Försök igen</span
+            ><span id="winHeading">Du klarade det!</span>
+          </h1>
+
+          <!-- SCORE SUMMARY -->
           <div class="summary">
             <div class="statRow">
-              <span class="currentStat" id="endingPointsSpan"></span> av 9
+              <span class="currentStat" id="endingPointsSpan"></span> av
+              <span id="maxPointsSpan"></span>
               <span>poäng</span>
             </div>
             <div class="statRow">
-              <span class="currentStat" id="endingAttemptsSpan"></span> av 8
+              <span class="currentStat" id="endingAttemptsSpan"></span> av
+              <span id="maxAttemptsSpan"></span>
               <span>försök</span>
             </div>
           </div>
+
+          <!-- PLAY AGAIN BUTTON -->
           <button class="btn" id="resetBtn">Spela igen</button>
         </div>
       </div>

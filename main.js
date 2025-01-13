@@ -192,7 +192,9 @@ const generateBoard = () => {
   //   if attempts enabled, insert attempts
   const attemptsSpan = document.getElementById('attemptsSpan');
   if (!attemptsEnabled) {
-    attemptsSpan.style.display = 'none';
+    if (attemptsSpan) {
+      attemptsSpan.style.display = 'none';
+    }
   }
 
   const helpBtn = document.createElement('div');
@@ -518,8 +520,12 @@ const generateScoreBoard = () => {
   // render stats
 
   if (attemptsEnabled) {
-    document.getElementById('currentAttemptsSpan').innerText = usedAttempts;
-    document.getElementById('maxAttemptsSpan').innerText = maxAttempts;
+    if (document.getElementById('currentAttemptsSpan')) {
+      document.getElementById('currentAttemptsSpan').innerText = usedAttempts;
+    }
+    if (document.getElementById('maxAttemptsSpan')) {
+      document.getElementById('maxAttemptsSpan').innerText = maxAttempts;
+    }
   }
 
   document.getElementById('currentPointsSpan').innerText = score;

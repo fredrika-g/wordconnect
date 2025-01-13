@@ -192,7 +192,7 @@ const generateBoard = () => {
   //   if attempts enabled, insert attempts
   const attemptsSpan = document.getElementById('attemptsSpan');
   if (!attemptsEnabled) {
-    attemptsSpan.classList.add('notVisible');
+    attemptsSpan.style.display = 'none';
   }
 
   const helpBtn = document.createElement('div');
@@ -618,13 +618,25 @@ const displayFinish = () => {
 
   const pointsSpan = document.getElementById('endingPointsSpan');
   pointsSpan.innerText = score;
+  const maxPointsSpan = document.getElementById('endingMaxPoints');
 
+  maxPointsSpan.innerText = maxPoints;
+
+  const attemptsDiv = document.querySelector('.attemptsResult');
   if (attemptsEnabled) {
-    const attemptsDiv = document.querySelector('.attemptsResult');
-    attemptsDiv.style.display = 'block';
+    if (attemptsDiv) {
+      attemptsDiv.style.display = 'block';
+    }
     const attemptsSpan = document.getElementById('endingAttemptsSpan');
 
-    attemptsSpan.innerText = usedAttempts;
+    if (attemptsSpan) {
+      attemptsSpan.innerText = usedAttempts;
+
+      const maxAttemptsSpan = document.getElementById('endingMaxAttempts');
+      maxAttemptsSpan.innerText = maxAttempts;
+    }
+  } else {
+    attemptsDiv.style.display = 'none';
   }
 };
 

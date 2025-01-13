@@ -110,6 +110,10 @@ body {
   }
 }
 
+/* .container > :not(.active) {
+  display: none;
+} */
+
 .container > .active {
   display: flex;
   flex-direction: column;

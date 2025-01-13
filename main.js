@@ -1,6 +1,6 @@
-const startPage = document.querySelector('#startPage');
-const gamePage = document.querySelector('#game');
-const finishPage = document.querySelector('#finishPage');
+const startPage = document.getElementById('startPage');
+const gamePage = document.getElementById('game');
+const finishPage = document.getElementById('finishPage');
 
 /* -------------------------------------------- */
 
@@ -652,9 +652,6 @@ const initGame = () => {
 
   // start game: render game page and contents
 
-  startPage.innerHTML = '';
-  finishPage.innerHTML = '';
-
   // set active page
   removeActive();
   gamePage.classList.add('active');
@@ -674,27 +671,6 @@ const displayStart = () => {
   // set active page
   removeActive();
   startPage.classList.add('active');
-
-  // create content
-  // 1. title
-  const titleElem = document.createElement('h1');
-  titleElem.innerText = appTitle;
-  titleElem.id = 'title';
-
-  // 2. instructions
-  const instructionsElem = document.createElement('p');
-  instructionsElem.innerText = instructions;
-  instructionsElem.classList.add('instructions');
-
-  // 3. start btn
-  const startBtn = document.createElement('button');
-  startBtn.innerText = startBtnText;
-  startBtn.id = 'startBtn';
-  startBtn.classList.add('btn');
-  startBtn.addEventListener('click', initGame);
-
-  // append content on page
-  startPage.append(titleElem, instructionsElem, startBtn);
 };
 
 // FINISH PAGE
@@ -751,8 +727,13 @@ const removeActive = () => {
   });
 };
 
+const addingEventListeners = () => {
+  document.getElementById('startBtn').addEventListener('click', initGame);
+};
+
 // APPLICATION ENTRY POINT
 const renderPage = () => {
+  addingEventListeners();
   // show start page
   displayStart();
 };

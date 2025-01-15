@@ -16,6 +16,7 @@
 
   /* set the background image of the letter picker here. If no image is to be used, set value to an empty string ("") */
   --letterPickerBackgroundImagePath: url(https://images.unsplash.com/photo-1565071559227-20ab25b7685e?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  --letterPickerBackgroundImagePath: url(https://download.logo.wine/logo/Scandinavian_Airlines/Scandinavian_Airlines-Logo.wine.png);
 
   /* the primary color used: influences background colors and graphics of the letter picker */
   /* !!! MUST BE HEX !!! */
@@ -28,6 +29,10 @@
   --success-color-border: #ff8095;
 
   --main-bg-color: #7ad0a19f;
+
+  --filled-keyword-text-color: #000;
+  --filled-word-text-color: #000;
+  --letter-picker-text-color: #fff;
 
   --primary-box-shadow: hsla(0, 0%, 65%, 0.6);
   --primary-box-shadow-inset: hsla(0, 0%, 60%, 0.1);
@@ -527,11 +532,94 @@ canvas,
 .letter-box.filled {
   background-color: #d4edda;
   border-color: #28a745;
+  color: var(--filled-word-text-color);
 }
 
 .letter-box.filled.keyword {
   background: var(--success-color);
   border-color: var(--success-color-border);
+  color: var(--filled-keyword-text-color);
+  position: relative; /* needed for pseudo element */
+  overflow: visible;
+}
+
+/* confetti effect */
+.letter-box.filled.keyword::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  background: radial-gradient(
+        circle,
+        /* rgba(255, 255, 255, 0.8) 10%, */ var(--main-bg-color) 10%,
+
+        rgba(255, 255, 255, 0) 70%
+      )
+      0 0 / 10px 10px,
+    radial-gradient(circle, rgba(9, 255, 0, 0.8) 10%, rgba(255, 255, 0, 0) 70%)
+      0 0 / 10px 10px,
+    radial-gradient(circle, rgba(64, 0, 255, 0.8) 10%, rgba(255, 0, 255, 0) 70%)
+      0 0 / 10px 10px;
+  background-repeat: repeat;
+  border-radius: inherit;
+  animation: glitter-border 2s infinite linear;
+  pointer-events: none;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    0% 100%,
+    10% 90%,
+    90% 90%,
+    90% 10%,
+    10% 10%
+  );
+}
+
+@keyframes glitter-border {
+  0% {
+    background-position: 0 0, 10px 10px, -10px -10px;
+  }
+  50% {
+    background-position: 10px 10px, 0 0, -5px -5px;
+  }
+  100% {
+    background-position: 0 0, 10px 10px, -10px -10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .letter-box.filled.keyword::before {
+    clip-path: polygon(
+      0% 0%,
+      100% 0%,
+      100% 100%,
+      0% 100%,
+      5% 95%,
+      95% 95%,
+      95% 5%,
+      5% 5%
+    );
+    background-size: 8px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .letter-box.filled.keyword::before {
+    clip-path: polygon(
+      0% 0%,
+      100% 0%,
+      100% 100%,
+      0% 100%,
+      3% 97%,
+      97% 97%,
+      97% 3%,
+      3% 3%
+    );
+    background-size: 6px 6px;
+  }
 }
 
 #finishPage {

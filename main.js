@@ -89,6 +89,11 @@ const primaryColorConv = `0x${primaryColorHex.slice(
   primaryColorHex.length
 )}`;
 
+// retrieving value from styles.css to set color of letters in letter picker
+const letterPickerTextColor = appStyles.getPropertyValue(
+  '--letter-picker-text-color'
+);
+
 // letter picker settings as object
 const letterPicker = {
   primary: primaryColorConv, // the primary color of the picker, based on value provided in the CSS
@@ -106,7 +111,7 @@ const letterPicker = {
     // color of the border surrounding each "bubble"
     return modifyColor(this.bubbleColor);
   },
-  letterColor: '#fff', // color of the letters
+  letterColor: letterPickerTextColor, // color of the letters
   fontFamily: 'Arial', // font
 };
 
